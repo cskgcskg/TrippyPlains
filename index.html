@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trippy Plains — FPV Drone Simulator</title>
+<meta name="description" content="Fly FPV drones across 13 hand-crafted worlds. Freestyle, race, or explore. On Steam now.">
+<meta property="og:title" content="Trippy Plains — FPV Drone Simulator">
+<meta property="og:description" content="13 worlds. 10 aircraft. Angle mode to full acro. Available on Steam.">
+<meta property="og:image" content="assets/capsule_main_460x215.png">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07000f;
+  --bg2:#0d0020;
+  --bg3:#100030;
+  --purple:#b44fff;
+  --cyan:#00f5d4;
+  --pink:#ff2d87;
+  --white:#f0eaff;
+  --muted:#9988bb;
+  --card:#140028;
+  --card-border:rgba(180,79,255,0.25);
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--white);
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  font-size:16px;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+/* ── CANVAS BACKGROUND ─────────────────────────────────── */
+#bg-canvas{
+  position:fixed;
+  top:0;left:0;width:100%;height:100%;
+  z-index:0;
+  pointer-events:none;
+  opacity:0.55;
+}
+
+/* ── NAV ────────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;width:100%;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 2.5rem;
+  background:rgba(7,0,15,0.8);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(180,79,255,0.15);
+}
+.nav-logo{
+  font-size:1.1rem;font-weight:700;letter-spacing:.08em;
+  background:linear-gradient(90deg,var(--purple),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-transform:uppercase;
+}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{
+  color:var(--muted);text-decoration:none;font-size:.85rem;
+  letter-spacing:.05em;text-transform:uppercase;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--cyan)}
+.nav-steam{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--purple);color:#fff;
+  text-decoration:none;font-size:.85rem;font-weight:600;
+  padding:.5rem 1.2rem;border-radius:6px;
+  letter-spacing:.04em;
+  transition:background .2s,transform .15s;
+}
+.nav-steam:hover{background:#9b35e8;transform:translateY(-1px)}
+
+/* ── HERO ───────────────────────────────────────────────── */
+#hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:8rem 2rem 4rem;
+}
+.hero-eyebrow{
+  font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:1.5rem;
+  opacity:.85;
+}
+.hero-title{
+  font-size:clamp(3rem,9vw,7rem);
+  font-weight:800;
+  line-height:.95;
+  letter-spacing:-.02em;
+  background:linear-gradient(135deg,#fff 0%,var(--purple) 50%,var(--cyan) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:1rem;
+}
+.hero-sub{
+  font-size:clamp(1rem,2.5vw,1.4rem);
+  color:var(--muted);
+  max-width:600px;
+  margin:0 auto 2.5rem;
+  line-height:1.5;
+}
+.hero-cta{
+  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
+  margin-bottom:3rem;
+}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:linear-gradient(135deg,var(--purple),#7022cc);
+  color:#fff;text-decoration:none;
+  font-size:1rem;font-weight:700;letter-spacing:.04em;
+  padding:.9rem 2.2rem;border-radius:8px;
+  border:none;cursor:pointer;
+  transition:transform .15s,box-shadow .2s;
+  box-shadow:0 0 24px rgba(180,79,255,0.4);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(180,79,255,0.6)}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:transparent;color:var(--white);text-decoration:none;
+  font-size:1rem;font-weight:600;letter-spacing:.04em;
+  padding:.9rem 2.2rem;border-radius:8px;
+  border:1px solid rgba(255,255,255,0.2);cursor:pointer;
+  transition:border-color .2s,transform .15s;
+}
+.btn-secondary:hover{border-color:var(--cyan);transform:translateY(-2px)}
+.hero-stats{
+  display:flex;gap:3rem;justify-content:center;flex-wrap:wrap;
+  margin-top:1rem;
+}
+.hero-stat{text-align:center}
+.hero-stat-n{
+  display:block;font-size:2.2rem;font-weight:800;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-stat-l{font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.hero-scroll{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  color:var(--muted);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+  animation:bob 2s ease-in-out infinite;
+}
+.scroll-arrow{width:20px;height:20px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg)}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+
+/* ── SECTION SHARED ─────────────────────────────────────── */
+section{position:relative;z-index:1;padding:6rem 2rem}
+.section-label{
+  font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:.75rem;
+}
+.section-title{
+  font-size:clamp(1.8rem,4vw,3rem);font-weight:800;
+  line-height:1.1;margin-bottom:1rem;
+}
+.section-desc{color:var(--muted);max-width:560px;font-size:1.05rem}
+.accent-purple{color:var(--purple)}
+.accent-cyan{color:var(--cyan)}
+
+/* ── FEATURES ───────────────────────────────────────────── */
+#features{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%)}
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1.5rem;
+  max-width:1100px;margin:3rem auto 0;
+}
+.feature-card{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:12px;
+  padding:1.75rem;
+  transition:border-color .2s,transform .2s;
+}
+.feature-card:hover{border-color:var(--purple);transform:translateY(-3px)}
+.feature-icon{
+  font-size:2rem;margin-bottom:1rem;
+  display:block;
+}
+.feature-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.5rem}
+.feature-card p{color:var(--muted);font-size:.9rem;line-height:1.6}
+
+/* ── SCREENSHOTS ────────────────────────────────────────── */
+#screenshots{background:var(--bg2)}
+.screenshots-header{max-width:1100px;margin:0 auto 2.5rem}
+.screenshots-track-wrap{
+  width:100%;overflow:hidden;
+  position:relative;
+}
+.screenshots-track-wrap::before,
+.screenshots-track-wrap::after{
+  content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none;
+}
+.screenshots-track-wrap::before{left:0;background:linear-gradient(90deg,var(--bg2),transparent)}
+.screenshots-track-wrap::after{right:0;background:linear-gradient(-90deg,var(--bg2),transparent)}
+.screenshots-track{
+  display:flex;gap:1rem;
+  width:max-content;
+  animation:scroll-shots 40s linear infinite;
+}
+.screenshots-track:hover{animation-play-state:paused}
+.screenshots-track img{
+  height:240px;width:auto;
+  border-radius:8px;
+  border:1px solid var(--card-border);
+  object-fit:cover;
+  cursor:pointer;
+  transition:transform .2s;
+}
+.screenshots-track img:hover{transform:scale(1.03)}
+@keyframes scroll-shots{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── LIGHTBOX ───────────────────────────────────────────── */
+#lightbox{
+  display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,.92);
+  align-items:center;justify-content:center;
+}
+#lightbox.open{display:flex}
+#lightbox-img{
+  max-width:88vw;max-height:85vh;
+  border-radius:8px;
+  border:1px solid rgba(180,79,255,0.3);
+  user-select:none;
+}
+#lightbox-close{
+  position:absolute;top:1.25rem;right:1.5rem;
+  font-size:2rem;color:var(--white);cursor:pointer;
+  background:none;border:none;line-height:1;
+  opacity:.7;transition:opacity .15s;
+}
+#lightbox-close:hover{opacity:1}
+#lightbox-prev,#lightbox-next{
+  position:absolute;top:50%;transform:translateY(-50%);
+  font-size:2rem;color:var(--white);cursor:pointer;
+  background:rgba(180,79,255,0.15);
+  border:1px solid rgba(180,79,255,0.3);
+  border-radius:50%;width:52px;height:52px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,transform .15s;
+  user-select:none;
+}
+#lightbox-prev:hover,#lightbox-next:hover{background:rgba(180,79,255,0.4);transform:translateY(-50%) scale(1.08)}
+#lightbox-prev{left:1.5rem}
+#lightbox-next{right:1.5rem}
+#lightbox-counter{
+  position:absolute;bottom:1.25rem;left:50%;transform:translateX(-50%);
+  font-size:.8rem;letter-spacing:.1em;color:var(--muted);
+}
+
+/* ── WORLDS ─────────────────────────────────────────────── */
+#worlds{background:linear-gradient(180deg,var(--bg2) 0%,var(--bg3) 100%)}
+.worlds-header{max-width:1100px;margin:0 auto 2.5rem}
+.worlds-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:1rem;
+  max-width:1100px;margin:0 auto;
+}
+.world-card{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:10px;
+  padding:1.25rem 1.5rem;
+  transition:border-color .2s,transform .2s;
+  cursor:default;
+}
+.world-card:hover{border-color:var(--cyan);transform:translateY(-2px)}
+.world-num{
+  font-size:.7rem;letter-spacing:.15em;
+  color:var(--cyan);margin-bottom:.4rem;
+  font-weight:600;
+}
+.world-name{font-size:1rem;font-weight:700;margin-bottom:.3rem}
+.world-desc{font-size:.82rem;color:var(--muted);line-height:1.5}
+
+/* ── AIRCRAFT ───────────────────────────────────────────── */
+#aircraft{background:var(--bg3)}
+.aircraft-header{max-width:1100px;margin:0 auto 2.5rem}
+.aircraft-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:1rem;
+  max-width:1100px;margin:0 auto;
+}
+.aircraft-card{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:10px;
+  padding:1.25rem;
+  display:flex;flex-direction:column;gap:.35rem;
+  transition:border-color .2s,transform .2s;
+}
+.aircraft-card:hover{border-color:var(--pink);transform:translateY(-2px)}
+.aircraft-name{font-size:.95rem;font-weight:700;color:var(--white)}
+.aircraft-size{font-size:.75rem;color:var(--purple);font-weight:600;letter-spacing:.05em}
+.aircraft-desc{font-size:.82rem;color:var(--muted)}
+
+/* ── MODES ──────────────────────────────────────────────── */
+#modes{
+  background:linear-gradient(180deg,var(--bg3) 0%,var(--bg) 100%);
+  text-align:center;
+}
+.modes-inner{max-width:860px;margin:0 auto}
+.modes-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;
+  margin-top:3rem;
+}
+.mode-card{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:14px;
+  padding:2.5rem 2rem;
+}
+.mode-card.acro{border-color:rgba(255,45,135,0.3)}
+.mode-badge{
+  display:inline-block;
+  font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+  font-weight:700;padding:.3rem .8rem;border-radius:4px;
+  margin-bottom:1rem;
+}
+.badge-angle{background:rgba(0,245,212,0.15);color:var(--cyan)}
+.badge-acro{background:rgba(255,45,135,0.15);color:var(--pink)}
+.mode-card h3{font-size:1.4rem;font-weight:800;margin-bottom:.75rem}
+.mode-card p{color:var(--muted);font-size:.95rem}
+
+/* ── CTA BANNER ─────────────────────────────────────────── */
+#cta{
+  background:var(--bg);
+  text-align:center;
+  padding:7rem 2rem;
+}
+.cta-inner{max-width:700px;margin:0 auto}
+.cta-inner h2{
+  font-size:clamp(2rem,5vw,3.5rem);font-weight:800;
+  margin-bottom:1rem;
+  background:linear-gradient(135deg,var(--white) 30%,var(--purple) 70%,var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.cta-inner p{color:var(--muted);font-size:1.1rem;margin-bottom:2.5rem}
+.steam-badge{
+  display:inline-flex;align-items:center;gap:.75rem;
+  background:#1b2838;
+  border:1px solid rgba(255,255,255,0.1);
+  color:#fff;text-decoration:none;
+  font-size:1rem;font-weight:600;
+  padding:1rem 2rem;border-radius:8px;
+  transition:background .2s,transform .15s;
+}
+.steam-badge:hover{background:#2a3f5f;transform:translateY(-2px)}
+.steam-icon{width:28px;height:28px;fill:#fff}
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+footer{
+  background:var(--bg);
+  border-top:1px solid rgba(180,79,255,0.1);
+  padding:2rem 2.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1rem;
+}
+.footer-logo{
+  font-size:.9rem;font-weight:700;letter-spacing:.08em;
+  background:linear-gradient(90deg,var(--purple),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-transform:uppercase;
+}
+.footer-links{display:flex;gap:1.5rem;list-style:none}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:.82rem;transition:color .2s}
+.footer-links a:hover{color:var(--cyan)}
+.footer-copy{color:var(--muted);font-size:.8rem}
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width:680px){
+  nav{padding:.8rem 1.25rem}
+  .nav-links{display:none}
+  .modes-row{grid-template-columns:1fr}
+  footer{flex-direction:column;text-align:center}
+  .footer-links{justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">Trippy Plains</span>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#screenshots">Screenshots</a></li>
+    <li><a href="#worlds">Worlds</a></li>
+    <li><a href="#aircraft">Aircraft</a></li>
+  </ul>
+  <a class="nav-steam" href="https://store.steampowered.com/app/4866640" target="_blank">
+    Get on Steam
+  </a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-eyebrow">FPV Drone Simulator &mdash; Available on Steam</p>
+  <h1 class="hero-title">Trippy<br>Plains</h1>
+  <p class="hero-sub">13 worlds. 10 aircraft. Angle mode to full acro.<br>No tutorials. No grinding. Just fly.</p>
+  <div class="hero-cta">
+    <a class="btn-primary" href="https://store.steampowered.com/app/4866640" target="_blank">
+      Get on Steam &rarr;
+    </a>
+    <a class="btn-secondary" href="#screenshots">See Screenshots</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="hero-stat-n">13</span><span class="hero-stat-l">Worlds</span></div>
+    <div class="hero-stat"><span class="hero-stat-n">10</span><span class="hero-stat-l">Aircraft</span></div>
+    <div class="hero-stat"><span class="hero-stat-n">2</span><span class="hero-stat-l">Flight Modes</span></div>
+    <div class="hero-stat"><span class="hero-stat-n">20</span><span class="hero-stat-l">Achievements</span></div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-arrow"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div style="max-width:1100px;margin:0 auto">
+    <p class="section-label">Why Trippy Plains</p>
+    <h2 class="section-title">Built for <span class="accent-purple">real pilots.</span><br>Accessible to <span class="accent-cyan">everyone.</span></h2>
+    <p class="section-desc">Whether you've never touched a controller or you fly acro daily — Trippy Plains meets you where you are.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">🎮</span>
+        <h3>Full Controller Support</h3>
+        <p>Xbox, PlayStation, Switch Pro, any XInput/DirectInput controller. Stick calibration and expo tuning per craft.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🌍</span>
+        <h3>13 Hand-Crafted Worlds</h3>
+        <p>From neon psychedelic plains to a 1:1 recreation of Central London. Every map has its own character and flow.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">✈️</span>
+        <h3>10 Distinct Aircraft</h3>
+        <p>5" freestyle quads, racing drones, a collective-pitch helicopter, cinewhoop, and more. Each flies differently.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🏁</span>
+        <h3>Live Race Timing</h3>
+        <p>Beacon gates, lap timers and leaderboards on race maps. Beat your best time on Speedway or Twister.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🌅</span>
+        <h3>Time of Day Lighting</h3>
+        <p>Fly at dawn, noon, dusk or night. Full dynamic lighting with bloom, film grain and cinematic post-processing.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">💨</span>
+        <h3>Real Physics</h3>
+        <p>Wind, turbulence, voltage sag, motor spool physics and dust kick on low passes. It behaves like the real thing.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🌀</span>
+        <h3>Portal Teleportation</h3>
+        <p>Fly through glowing rings on Trippy Plains and teleport across the map. One of a kind.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">⚡</span>
+        <h3>No Loading Screens</h3>
+        <p>Switch between all 13 maps instantly. All worlds are pre-built and ready to go.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCREENSHOTS -->
+<section id="screenshots" style="padding:6rem 0">
+  <div class="screenshots-header" style="padding:0 2rem">
+    <p class="section-label">Gallery</p>
+    <h2 class="section-title">See the <span class="accent-purple">worlds</span></h2>
+  </div>
+  <div class="screenshots-track-wrap">
+    <div class="screenshots-track" id="track"></div>
+  </div>
+</section>
+
+<!-- WORLDS -->
+<section id="worlds">
+  <div class="worlds-header">
+    <p class="section-label">Maps</p>
+    <h2 class="section-title">13 worlds to <span class="accent-cyan">explore</span></h2>
+    <p class="section-desc">Each map is a distinct environment with its own layout, atmosphere and flying style.</p>
+  </div>
+  <div class="worlds-grid">
+    <div class="world-card"><div class="world-num">01</div><div class="world-name">Trippy Plains</div><div class="world-desc">Neon portals, rolling hills, teleportation rings. The home world.</div></div>
+    <div class="world-card"><div class="world-num">02</div><div class="world-name">Central London</div><div class="world-desc">1:1 Westminster. Big Ben, Thames, Parliament interiors.</div></div>
+    <div class="world-card"><div class="world-num">03</div><div class="world-name">Starbase</div><div class="world-desc">Five climbable rockets, cranes, fuel towers. A certain South Texas vibe.</div></div>
+    <div class="world-card"><div class="world-num">04</div><div class="world-name">Speedway</div><div class="world-desc">Tight race circuit with beacon gates and live lap timing.</div></div>
+    <div class="world-card"><div class="world-num">05</div><div class="world-name">Twister</div><div class="world-desc">Banked corners, elevation changes. Technical and punishing.</div></div>
+    <div class="world-card"><div class="world-num">06</div><div class="world-name">Ruhrwerk Factory</div><div class="world-desc">Turbines, conveyors, two-storey interior space to thread.</div></div>
+    <div class="world-card"><div class="world-num">07</div><div class="world-name">Bando Resort</div><div class="world-desc">Abandoned leisure park. Crumbling pools, broken rooftops.</div></div>
+    <div class="world-card"><div class="world-num">08</div><div class="world-name">Atompark</div><div class="world-desc">Nuclear facility. Dive-through cooling towers and reactor buildings.</div></div>
+    <div class="world-card"><div class="world-num">09</div><div class="world-name">Wonderpark</div><div class="world-desc">Fairground at dusk. Ferris wheels spin, teacups rotate.</div></div>
+    <div class="world-card"><div class="world-num">10</div><div class="world-name">Field</div><div class="world-desc">Wide open countryside. Perfect for learning and high-speed runs.</div></div>
+    <div class="world-card"><div class="world-num">11</div><div class="world-name">Japan / Tokyo</div><div class="world-desc">Neon city streets, torii gates, dense urban skyline at night.</div></div>
+    <div class="world-card"><div class="world-num">12</div><div class="world-name">Runner</div><div class="world-desc">Corridor gauntlet. Speed gates, tight gaps, relentless flow.</div></div>
+    <div class="world-card"><div class="world-num">13</div><div class="world-name">Sandbox</div><div class="world-desc">Place your own obstacles. Design your own course.</div></div>
+  </div>
+</section>
+
+<!-- AIRCRAFT -->
+<section id="aircraft">
+  <div class="aircraft-header">
+    <p class="section-label">Fleet</p>
+    <h2 class="section-title">10 aircraft. <span class="accent-pink" style="color:var(--pink)">One simulator.</span></h2>
+    <p class="section-desc">Each craft has its own weight, motor response and handling profile. Find yours.</p>
+  </div>
+  <div class="aircraft-grid">
+    <div class="aircraft-card"><div class="aircraft-name">APEX 5</div><div class="aircraft-size">5" Freestyle</div><div class="aircraft-desc">Snappy, punchy, the all-rounder.</div></div>
+    <div class="aircraft-card"><div class="aircraft-name">GHOST 5</div><div class="aircraft-size">5" Freestyle</div><div class="aircraft-desc">Softer tune. Floaty and forgiving.</div></div>
+    <div class="aircraft-card"><div class="aircraft-name">VENOM R</div><div class="aircraft-size">5" Racer</div><div class="aircraft-desc">Fast, stiff, unforgiving.</div></div>
+    <div class="aircraft-card"><div class="aircraft-name">SILK 3</div><div class="aircraft-size">3.5" Cinewhoop</div><div class="aircraft-desc">Smooth and cinematic.</div></div>
+    <div class="aircraft-card"><div class="aircraft-name">STING 2.5</div><div class="aircraft-size">2.5" Micro</div><div class="aircraft-desc">Twitchy and quick.</div></div>
+    <div class="aircraft-card"><div class="aircraft-name">HORIZON 7</div><div class="aircraft-size">7" Long Range</div><div class="aircraft-desc">Effortless power.</div></div>
+    <div class="aircraft-card"><div class="aircraft-name">ROTOR CP</div><div class="aircraft-size">Collective Pitch</div><div class="aircraft-desc">A completely different challenge.</div></div>
+    <div class="aircraft-card"><div class="aircraft-name">FLEX 3.5</div><div class="aircraft-size">3.5" Freestyle</div><div class="aircraft-desc">Nimble and punchy.</div></div>
+    <div class="aircraft-card"><div class="aircraft-name">PICO 65</div><div class="aircraft-size">65mm Whoop</div><div class="aircraft-desc">Tiny but fierce.</div></div>
+    <div class="aircraft-card"><div class="aircraft-name">TITAN X8</div><div class="aircraft-size">8" Cinelifter</div><div class="aircraft-desc">Heavy, stable, cinematic lift.</div></div>
+  </div>
+</section>
+
+<!-- FLIGHT MODES -->
+<section id="modes">
+  <div class="modes-inner">
+    <p class="section-label">Flight Modes</p>
+    <h2 class="section-title">Your pace. <span class="accent-purple">Your rules.</span></h2>
+    <p class="section-desc" style="margin:0 auto">Switch between modes at any time with a single key. No menus, no loading.</p>
+    <div class="modes-row">
+      <div class="mode-card">
+        <span class="mode-badge badge-angle">Angle Mode</span>
+        <h3>Self-Levelling</h3>
+        <p>The drone holds itself level when you release the sticks. Pick it up in minutes. Perfect for beginners exploring any of the 13 worlds.</p>
+      </div>
+      <div class="mode-card acro">
+        <span class="mode-badge badge-acro">Acro Mode</span>
+        <h3>Full Manual</h3>
+        <p>No self-level. The drone goes exactly where you point it and stays there. The real FPV experience. Use it as a muscle-memory trainer for the real thing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-inner">
+    <h2>Ready to fly?</h2>
+    <p>Available now on Steam. Windows, with Mac coming soon.</p>
+    <a class="steam-badge" href="https://store.steampowered.com/app/4866640" target="_blank">
+      <svg class="steam-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.606 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.455 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/></svg>
+      View on Steam
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">Trippy Plains</span>
+  <ul class="footer-links">
+    <li><a href="https://store.steampowered.com/app/4866640" target="_blank">Steam Store</a></li>
+    <li><a href="privacy.html">Privacy Policy</a></li>
+  </ul>
+  <span class="footer-copy">&copy; 2026 The Best. All rights reserved.</span>
+</footer>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-modal="true">
+  <button id="lightbox-close" aria-label="Close">&times;</button>
+  <button id="lightbox-prev" aria-label="Previous">&#8592;</button>
+  <img id="lightbox-img" src="" alt="Screenshot">
+  <button id="lightbox-next" aria-label="Next">&#8594;</button>
+  <div id="lightbox-counter"></div>
+</div>
+
+<script>
+// ── Animated canvas background (floating particles + grid) ──────────────────
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function initParticles() {
+  particles = Array.from({length: 80}, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    r: Math.random() * 1.5 + 0.3,
+    vx: (Math.random() - .5) * .25,
+    vy: (Math.random() - .5) * .25,
+    hue: Math.random() < .5 ? 280 : 170,
+    alpha: Math.random() * .6 + .2,
+  }));
+}
+
+function drawGrid() {
+  ctx.strokeStyle = 'rgba(130,60,255,0.06)';
+  ctx.lineWidth = 1;
+  const gap = 60;
+  for (let x = 0; x < W; x += gap) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 0; y < H; y += gap) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+}
+
+let t = 0;
+function frame() {
+  ctx.clearRect(0, 0, W, H);
+  drawGrid();
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+    if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${p.hue},100%,75%,${p.alpha})`;
+    ctx.fill();
+  });
+  // slow drifting glow orbs
+  const orbs = [
+    {x: W*.2, y: H*.3, hue: 280}, {x: W*.8, y: H*.7, hue: 170},
+    {x: W*.5, y: H*.5, hue: 320},
+  ];
+  orbs.forEach((o, i) => {
+    const ox = o.x + Math.sin(t * .0004 + i * 2) * 60;
+    const oy = o.y + Math.cos(t * .0003 + i * 1.5) * 40;
+    const grad = ctx.createRadialGradient(ox, oy, 0, ox, oy, 220);
+    grad.addColorStop(0, `hsla(${o.hue},100%,65%,0.07)`);
+    grad.addColorStop(1, 'transparent');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(ox, oy, 220, 0, Math.PI * 2); ctx.fill();
+  });
+  t++;
+  requestAnimationFrame(frame);
+}
+
+resize(); initParticles(); frame();
+window.addEventListener('resize', () => { resize(); initParticles(); });
+
+// ── Screenshots track ────────────────────────────────────────────────────────
+const shots = [
+  'Screenshot 2026-06-16 at 20.33.14.png',
+  'Screenshot 2026-06-16 at 20.44.58.png',
+  'Screenshot 2026-06-16 at 20.51.46.png',
+  'Screenshot 2026-06-16 at 20.52.24.png',
+  'Screenshot 2026-06-16 at 20.53.40.png',
+  'Screenshot 2026-06-16 at 20.54.40.png',
+  'Screenshot 2026-06-16 at 20.55.25.png',
+  'Screenshot 2026-06-16 at 20.56.11.png',
+  'Screenshot 2026-06-16 at 20.57.09.png',
+  'Screenshot 2026-06-16 at 20.57.35.png',
+  'Screenshot 2026-06-16 at 20.58.04.png',
+];
+
+const track = document.getElementById('track');
+// duplicate for seamless loop — clicks open lightbox at correct index
+[...shots, ...shots].forEach((name, i) => {
+  const img = document.createElement('img');
+  img.src = 'screenshots/' + name;
+  img.alt = 'Trippy Plains screenshot';
+  img.addEventListener('click', () => openLightbox(i % shots.length));
+  track.appendChild(img);
+});
+
+// ── Lightbox with prev/next navigation ───────────────────────────────────────
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lightbox-img');
+const lbCounter = document.getElementById('lightbox-counter');
+let lbIndex = 0;
+
+function openLightbox(idx) {
+  lbIndex = ((idx % shots.length) + shots.length) % shots.length;
+  lbImg.src = 'screenshots/' + shots[lbIndex];
+  lbCounter.textContent = (lbIndex + 1) + ' / ' + shots.length;
+  lb.classList.add('open');
+}
+function lbPrev() { openLightbox(lbIndex - 1); }
+function lbNext() { openLightbox(lbIndex + 1); }
+
+document.getElementById('lightbox-close').addEventListener('click', () => lb.classList.remove('open'));
+document.getElementById('lightbox-prev').addEventListener('click', e => { e.stopPropagation(); lbPrev(); });
+document.getElementById('lightbox-next').addEventListener('click', e => { e.stopPropagation(); lbNext(); });
+lb.addEventListener('click', e => { if (e.target === lb) lb.classList.remove('open'); });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') lb.classList.remove('open');
+  if (e.key === 'ArrowLeft') lbPrev();
+  if (e.key === 'ArrowRight') lbNext();
+});
+
+// Touch swipe support
+let touchStartX = 0;
+lb.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
+lb.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 40) dx < 0 ? lbNext() : lbPrev();
+});
+
+// ── Intersection fade-in ─────────────────────────────────────────────────────
+const style = document.createElement('style');
+style.textContent = `.fade-in{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}.fade-in.visible{opacity:1;transform:none}`;
+document.head.appendChild(style);
+document.querySelectorAll('.feature-card,.world-card,.aircraft-card,.mode-card').forEach(el => {
+  el.classList.add('fade-in');
+});
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 40);
+      io.unobserve(e.target);
+    }
+  });
+}, {threshold: .1});
+document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
