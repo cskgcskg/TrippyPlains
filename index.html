@@ -3,11 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trippy Plains — FPV Drone Simulator</title>
-<meta name="description" content="Fly FPV drones across 15 hand-crafted worlds — from a 1:1 Westminster to a flyable fractal. Out now on Steam for Windows & Mac, and on the App Store for iPhone & iPad. now.">
-<meta property="og:title" content="Trippy Plains — FPV Drone Simulator">
-<meta property="og:description" content="15 worlds. 10 aircraft. Angle mode to full acro. Out now on Steam and the App Store.">
-<meta property="og:image" content="assets/capsule_main_460x215.png">
+<title>Trippy Plains: FPV Drone Simulator for Windows, Mac and iPhone</title>
+<meta name="description" content="FPV drone simulator for Windows, Mac and iPhone. Launch a rocket and fly the booster catch, explore a working industrial yard and a flyable fractal. 15 worlds, 10 aircraft, physics tuned by a real FPV pilot.">
+<link rel="canonical" href="https://cskgcskg.github.io/TrippyPlains/">
+<link rel="icon" href="assets/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cskgcskg.github.io/TrippyPlains/">
+<meta property="og:title" content="Trippy Plains: FPV Drone Simulator">
+<meta property="og:description" content="Launch a rocket, chase the booster home, dive a fractal. FPV freestyle on Windows, Mac and iPhone.">
+<meta property="og:image" content="https://cskgcskg.github.io/TrippyPlains/screenshots/v24/og_1200x630.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Trippy Plains: FPV Drone Simulator">
+<meta name="twitter:description" content="Launch a rocket, chase the booster home, dive a fractal. FPV freestyle on Windows, Mac and iPhone.">
+<meta name="twitter:image" content="https://cskgcskg.github.io/TrippyPlains/screenshots/v24/og_1200x630.jpg">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "Trippy Plains", "alternateName": "Trippy Plains: FPV Drone Simulator", "url": "https://cskgcskg.github.io/TrippyPlains/", "image": "https://cskgcskg.github.io/TrippyPlains/screenshots/v24/og_1200x630.jpg", "description": "FPV drone freestyle simulator with 15 worlds, from a working industrial yard and a rocket launch site to a flyable fractal. Physics tuned by a real FPV pilot. Windows, Mac and iPhone.", "genre": ["Simulation", "Flight"], "gamePlatform": ["Windows", "macOS", "iOS"], "applicationCategory": "Game", "operatingSystem": "Windows, macOS, iOS", "playMode": ["SinglePlayer", "MultiPlayer"], "author": {"@type": "Person", "name": "Michal Kowalski"}, "offers": [{"@type": "Offer", "url": "https://store.steampowered.com/app/4866640/", "seller": {"@type": "Organization", "name": "Steam"}}, {"@type": "Offer", "url": "https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665", "seller": {"@type": "Organization", "name": "App Store"}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does Trippy Plains run on Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The Steam version runs on Windows and macOS (Apple Silicon and Intel, notarized by Apple). It is also on the Mac App Store."}}, {"@type": "Question", "name": "Is it on iPhone?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, on the App Store. On iPhone you fly with on-screen touch sticks; on a Mac you can use a keyboard, a gamepad or your radio."}}, {"@type": "Question", "name": "Which controllers work?", "acceptedAnswer": {"@type": "Answer", "text": "FPV radio transmitters in USB joystick mode (including DJI remotes), Xbox, PlayStation and Switch Pro controllers, and keyboard. A calibration wizard maps any stick layout."}}, {"@type": "Question", "name": "Do I need a powerful PC?", "acceptedAnswer": {"@type": "Answer", "text": "No. Trippy Plains is built to run smoothly on laptops, with quality modes for weaker hardware."}}, {"@type": "Question", "name": "Is there multiplayer?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, as a preview: online rooms through Steam, up to 8 pilots per room. Everyone in a room needs the same game version."}}, {"@type": "Question", "name": "Is it good for learning FPV?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Start in angle mode, which levels itself, then switch to acro, the real FPV mode, when you are ready. The physics are tuned against a real 5-inch quad."}}, {"@type": "Question", "name": "Who makes it?", "acceptedAnswer": {"@type": "Answer", "text": "A solo developer and FPV pilot, building with AI tools."}}]}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -410,151 +421,115 @@ footer{
   footer{flex-direction:column;text-align:center}
   .footer-links{justify-content:center}
 }
+
+/* ── latest additions ─────────────────────────────────────── */
+#hero{background:linear-gradient(180deg,rgba(7,0,15,.55) 0%,rgba(7,0,15,.35) 45%,var(--bg) 100%),url('screenshots/v24/hero_milky_way.jpg') center/cover no-repeat}
+.hero-sub{color:#d9cdf5}
+.hero-badge{display:inline-block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#07000f;background:var(--cyan);padding:.3rem .8rem;border-radius:4px;margin-bottom:1.2rem}
+.platforms{margin-top:.25rem;color:var(--muted);font-size:.85rem;letter-spacing:.06em}
+#new{background:var(--bg)}
+.new-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;max-width:1100px;margin:3rem auto 0}
+.new-card{background:var(--card);border:1px solid var(--card-border);border-radius:12px;overflow:hidden;transition:border-color .2s,transform .2s}
+.new-card:hover{border-color:var(--purple);transform:translateY(-3px)}
+.new-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;cursor:pointer}
+.new-card .body{padding:1.25rem 1.4rem 1.5rem}
+.new-card h3{font-size:1.1rem;font-weight:700;margin-bottom:.4rem}
+.new-card p{color:var(--muted);font-size:.9rem;line-height:1.6}
+.shots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.8rem;max-width:1100px;margin:0 auto;padding:0 2rem}
+.shots-grid img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;border:1px solid var(--card-border);cursor:pointer;transition:transform .2s,border-color .2s}
+.shots-grid img:hover{transform:scale(1.03);border-color:var(--cyan)}
+#faq{background:var(--bg2)}
+.faq{max-width:860px;margin:2.5rem auto 0}
+.faq details{background:var(--card);border:1px solid var(--card-border);border-radius:10px;margin-bottom:.8rem;padding:1rem 1.25rem}
+.faq summary{cursor:pointer;font-weight:700;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';float:right;color:var(--cyan);font-weight:800}
+.faq details[open] summary::after{content:'–'}
+.faq p{color:var(--muted);margin-top:.6rem;font-size:.95rem}
+.world-card.featured{border-color:rgba(0,245,212,.45)}
+.tag{display:inline-block;font-size:.6rem;letter-spacing:.14em;font-weight:800;color:#07000f;background:var(--cyan);border-radius:3px;padding:.05rem .4rem;margin-left:.4rem;vertical-align:middle}
+@media(max-width:680px){.nav-appstore{display:none}#hero{padding-top:7rem}.hero-stats{gap:1.5rem}}
 </style>
 </head>
 <body>
 
 <canvas id="bg-canvas"></canvas>
 
-<!-- NAV -->
 <nav>
   <span class="nav-logo">Trippy Plains</span>
   <ul class="nav-links">
+    <li><a href="#new">What's new</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#screenshots">Screenshots</a></li>
     <li><a href="#worlds">Worlds</a></li>
-    <li><a href="#aircraft">Aircraft</a></li>
+    <li><a href="#faq">FAQ</a></li>
   </ul>
   <div class="nav-buttons">
-    <a class="nav-steam" href="https://store.steampowered.com/app/4866640" target="_blank">Get it on Steam</a>
-    <a class="nav-appstore" href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" title="Download on the App Store">
-      <svg width="14" height="17" viewBox="0 0 814 1000" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-37.5-155.5-127.4C46 382.8-.2 262.5-.2 203.2c0-17.3 1.3-34.5 4.2-51.4 28.4-157.6 154.6-245.6 278.7-245.6 71.8 0 131.4 47.1 176.6 47.1 42.8 0 109.5-49.8 194.2-49.8 31.7 0 108.2 1.9 172.3 67.3zm-174.6-209.2c-34.5 40.8-93.4 72.3-147.7 72.3-5.2 0-10.3-.3-15.5-1-1.3-5.8-1.9-11.9-1.9-18.1 0-38.5 19.4-79.3 51.4-105.1 32-25.8 84-44.5 128.3-46.5.6 6.4 1 12.8 1 18.5 0 38.5-8.4 76.7-15.6 79.9z"/></svg>
-      App Store
-    </a>
+    <a class="nav-steam" href="https://store.steampowered.com/app/4866640/?utm_source=website&amp;utm_medium=site&amp;utm_campaign=latest" target="_blank" rel="noopener">Get it on Steam</a>
+    <a class="nav-appstore" href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" rel="noopener" title="Download on the App Store"><svg width="14" height="17" fill="currentColor" style="flex-shrink:0" viewBox="0 0 814 1000" xmlns="http://www.w3.org/2000/svg"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-37.5-155.5-127.4C46 382.8-.2 262.5-.2 203.2c0-17.3 1.3-34.5 4.2-51.4 28.4-157.6 154.6-245.6 278.7-245.6 71.8 0 131.4 47.1 176.6 47.1 42.8 0 109.5-49.8 194.2-49.8 31.7 0 108.2 1.9 172.3 67.3zm-174.6-209.2c-34.5 40.8-93.4 72.3-147.7 72.3-5.2 0-10.3-.3-15.5-1-1.3-5.8-1.9-11.9-1.9-18.1 0-38.5 19.4-79.3 51.4-105.1 32-25.8 84-44.5 128.3-46.5.6 6.4 1 12.8 1 18.5 0 38.5-8.4 76.7-15.6 79.9z"/></svg> App Store</a>
   </div>
 </nav>
 
-<!-- HERO -->
 <section id="hero">
-  <p class="hero-eyebrow">FPV Drone Simulator &mdash; Out Now on Steam &amp; iOS</p>
+  <span class="hero-badge">Latest update: rockets you can launch</span>
+  <p class="hero-eyebrow">FPV Freestyle Simulator</p>
   <h1 class="hero-title">Trippy<br>Plains</h1>
-  <p class="hero-sub">15 worlds. 10 aircraft. Angle mode to full acro.<br>No tutorials. No grinding. Just fly.</p>
+  <p class="hero-sub">Real places and impossible ones. Launch a rocket and chase the booster home, thread a working industrial yard, dive a fractal.<br>Physics tuned by a pilot who flies a real 5-inch.</p>
   <div class="hero-cta">
-    <a class="btn-primary" href="https://store.steampowered.com/app/4866640" target="_blank">
-      Get it on Steam &rarr;
-    </a>
-    <a class="btn-secondary" href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" title="Download on the App Store">
-      <svg width="14" height="17" viewBox="0 0 814 1000" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-37.5-155.5-127.4C46 382.8-.2 262.5-.2 203.2c0-17.3 1.3-34.5 4.2-51.4 28.4-157.6 154.6-245.6 278.7-245.6 71.8 0 131.4 47.1 176.6 47.1 42.8 0 109.5-49.8 194.2-49.8 31.7 0 108.2 1.9 172.3 67.3zm-174.6-209.2c-34.5 40.8-93.4 72.3-147.7 72.3-5.2 0-10.3-.3-15.5-1-1.3-5.8-1.9-11.9-1.9-18.1 0-38.5 19.4-79.3 51.4-105.1 32-25.8 84-44.5 128.3-46.5.6 6.4 1 12.8 1 18.5 0 38.5-8.4 76.7-15.6 79.9z"/></svg>
-      Download on the App Store
-    </a>
-    <a class="btn-secondary" href="#screenshots">See Screenshots</a>
+    <a class="btn-primary" href="https://store.steampowered.com/app/4866640/?utm_source=website&amp;utm_medium=site&amp;utm_campaign=latest" target="_blank" rel="noopener">Get it on Steam &rarr;</a>
+    <a class="btn-secondary" href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" rel="noopener" title="Download on the App Store"><svg width="14" height="17" fill="currentColor" style="flex-shrink:0" viewBox="0 0 814 1000" xmlns="http://www.w3.org/2000/svg"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-37.5-155.5-127.4C46 382.8-.2 262.5-.2 203.2c0-17.3 1.3-34.5 4.2-51.4 28.4-157.6 154.6-245.6 278.7-245.6 71.8 0 131.4 47.1 176.6 47.1 42.8 0 109.5-49.8 194.2-49.8 31.7 0 108.2 1.9 172.3 67.3zm-174.6-209.2c-34.5 40.8-93.4 72.3-147.7 72.3-5.2 0-10.3-.3-15.5-1-1.3-5.8-1.9-11.9-1.9-18.1 0-38.5 19.4-79.3 51.4-105.1 32-25.8 84-44.5 128.3-46.5.6 6.4 1 12.8 1 18.5 0 38.5-8.4 76.7-15.6 79.9z"/></svg> Download on the App Store</a>
   </div>
-  <div class="hero-stats">
+  <p class="platforms">Windows &middot; Mac &middot; iPhone</p>
+  <div class="hero-stats" style="margin-top:2rem">
     <div class="hero-stat"><span class="hero-stat-n">15</span><span class="hero-stat-l">Worlds</span></div>
     <div class="hero-stat"><span class="hero-stat-n">10</span><span class="hero-stat-l">Aircraft</span></div>
-    <div class="hero-stat"><span class="hero-stat-n">2</span><span class="hero-stat-l">Flight Modes</span></div>
-    <div class="hero-stat"><span class="hero-stat-n">0</span><span class="hero-stat-l">Loading Screens</span></div>
+    <div class="hero-stat"><span class="hero-stat-n">120&deg;</span><span class="hero-stat-l">FPV Camera</span></div>
+    <div class="hero-stat"><span class="hero-stat-n">3</span><span class="hero-stat-l">Platforms</span></div>
   </div>
-  <div class="hero-scroll">
-    <div class="scroll-arrow"></div>
-    Scroll
-  </div>
+  <div class="hero-scroll"><div class="scroll-arrow"></div>Scroll</div>
 </section>
 
-<!-- FEATURES -->
+<section id="new">
+  <div style="max-width:1100px;margin:0 auto">
+    <p class="section-label">Latest update &middot; free for every owner</p>
+    <h2 class="section-title">Rockets you can launch. <span class="accent-cyan">Worlds that look (un)real.</span></h2>
+    <p class="section-desc">The biggest update yet: a rebuilt launch site, a canyon full of life, and a realism pass across the maps.</p>
+  </div>
+  <div class="new-grid"><div class="new-card"><img src="screenshots/v24/01_starbase_liftoff.jpg" alt="Launch a rocket yourself in Trippy Plains" loading="lazy" data-shot="01_starbase_liftoff.jpg"><div class="body"><h3>Launch a rocket yourself</h3><p>Touch a ready stack at the tower to start the countdown, or wait: one goes up every 4 to 7 minutes. Lift-off, hot staging high above, then the booster flies back and the tower arms catch it.</p></div></div><div class="new-card"><img src="screenshots/v24/03_starbase_milky_way.jpg" alt="A launch site built to look real in Trippy Plains" loading="lazy" data-shot="03_starbase_milky_way.jpg"><div class="body"><h3>A launch site built to look real</h3><p>Stainless steel rockets with welded rings, a tank farm, pipe racks and assembly bays. Photographic light by day; at dusk, the Milky Way, a Starlink train, the ISS and meteors.</p></div></div><div class="new-card"><img src="screenshots/v24/05_yard_drone_assembly_line.jpg" alt="The Yard in Trippy Plains" loading="lazy" data-shot="05_yard_drone_assembly_line.jpg"><div class="body"><h3>The Yard</h3><p>The default map: a working industrial yard with a container terminal, steel frames, a site office you can fly through and a drone assembly line where robot arms build quads.</p></div></div><div class="new-card"><img src="screenshots/v24/04_canyon_dragon_fire.jpg" alt="Canyon, full of life in Trippy Plains" loading="lazy" data-shot="04_canyon_dragon_fire.jpg"><div class="body"><h3>Canyon, full of life</h3><p>Touch the dragon and it breathes fire. Lava runs from the volcano into the river and its hot air lifts you. A petrified forest, cave houses and a gibbon on a highline 73 m up.</p></div></div><div class="new-card"><img src="screenshots/v24/06_bando_shell_xl_dusk.jpg" alt="Bando: faster, with stairwells in Trippy Plains" loading="lazy" data-shot="06_bando_shell_xl_dusk.jpg"><div class="body"><h3>Bando: faster, with stairwells</h3><p>Unfinished concrete towers with stairwells through every floor: fly in at the ground, out through the roof. In our tests it draws 22 to 25% faster than before.</p></div></div><div class="new-card"><img src="screenshots/v24/07_fractal_unicorn_herd.jpg" alt="The Fractal world in Trippy Plains" loading="lazy" data-shot="07_fractal_unicorn_herd.jpg"><div class="body"><h3>The Fractal world</h3><p>A flyable fractal mind. A herd of 18 unicorns whose horns light up as you pass, winged pegasi, glowing pandas, Menger-sponge dives and Mandelbrot monoliths.</p></div></div></div>
+</section>
+
 <section id="features">
   <div style="max-width:1100px;margin:0 auto">
     <p class="section-label">Why Trippy Plains</p>
-    <h2 class="section-title">Built for <span class="accent-purple">real pilots.</span><br>Accessible to <span class="accent-cyan">everyone.</span></h2>
-    <p class="section-desc">Whether you've never touched a controller or you fly acro daily — Trippy Plains meets you where you are.</p>
-    <div class="features-grid">
-      <div class="feature-card">
-        <span class="feature-icon">🎮</span>
-        <h3>Full Controller Support</h3>
-        <p>FPV/RC radio transmitters in USB mode, plus Xbox, PlayStation, Switch Pro and generic gamepads. Stick calibration wizard and expo tuning per craft.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🌍</span>
-        <h3>15 Hand-Crafted Worlds</h3>
-        <p>From neon psychedelic plains to a 1:1 recreation of Central London — and a flyable fractal dreamscape. Every map has its own character and flow.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">✈️</span>
-        <h3>10 Distinct Aircraft</h3>
-        <p>5" freestyle quads, racing drones, a collective-pitch helicopter, cinewhoop, and more. Each flies differently.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🏁</span>
-        <h3>Live Race Timing</h3>
-        <p>Beacon gates, lap timers and leaderboards on race maps. Beat your best time on Speedway or Twister.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🌅</span>
-        <h3>Time of Day Lighting</h3>
-        <p>Fly at dawn, noon, dusk or night. Full dynamic lighting with bloom, film grain and cinematic post-processing.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">💨</span>
-        <h3>Real Physics</h3>
-        <p>Wind, turbulence, voltage sag, motor spool physics and dust kick on low passes. It behaves like the real thing.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🌀</span>
-        <h3>Portal Teleportation</h3>
-        <p>Fly through glowing rings on Trippy Plains and teleport across the map. One of a kind.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">⚡</span>
-        <h3>No Loading Screens</h3>
-        <p>Switch between all 15 worlds instantly — or fly through a portal and teleport between them. Everything is pre-built and ready to go.</p>
-      </div>
-    </div>
+    <h2 class="section-title">Built for <span class="accent-purple">real pilots.</span><br>Runs on <span class="accent-cyan">what you have.</span></h2>
+    <p class="section-desc">Whether you have never touched a radio or you fly acro every day, Trippy Plains meets you where you are.</p>
+    <div class="features-grid"><div class="feature-card"><span class="feature-icon">🪂</span><h3>Physics tuned by a real pilot</h3><p>Tuned against a real 5-inch freestyle quad: no floaty hang at the top of a climb; it drops the moment you cut throttle. Fine-tune fall speed, apex hang, freefall drag and rotor brake with sliders, and reset to defaults in one click.</p></div><div class="feature-card"><span class="feature-icon">🎥</span><h3>A real FPV view</h3><p>120° camera like a modern digital FPV system, with the tips of your props in view. Four times of day, from dawn to a night under the Milky Way.</p></div><div class="feature-card"><span class="feature-icon">🎮</span><h3>Your radio or a gamepad</h3><p>RC transmitters in USB mode (including DJI remotes), Xbox, PlayStation and Switch Pro pads, or keyboard. A calibration wizard maps any stick, and the menus work fully on a controller.</p></div><div class="feature-card"><span class="feature-icon">💻</span><h3>Runs on a laptop</h3><p>Quality modes for modest hardware, so it stays smooth on a laptop, a Mac mini or a recent iPhone. No gaming PC required.</p></div><div class="feature-card"><span class="feature-icon">🤖</span><h3>AI wingmen</h3><p>AI drones fly racing lines around you, so the maps never feel empty.</p></div><div class="feature-card"><span class="feature-icon">🌐</span><h3>Fly together (preview)</h3><p>Online rooms through Steam, up to 8 pilots per room. Join the same room name, or invite a friend.</p></div><div class="feature-card"><span class="feature-icon">🌀</span><h3>Portals between worlds</h3><p>Fly through a glowing ring and arrive in another map, speed kept. Maps load in small steps with a progress bar, not one long freeze.</p></div><div class="feature-card"><span class="feature-icon">🏁</span><h3>Race timing</h3><p>Beacon gates and lap timers on Speedway and Twister. Beat your best time.</p></div></div>
   </div>
 </section>
 
-<!-- SCREENSHOTS -->
-<section id="screenshots" style="padding:6rem 0">
+<section id="screenshots">
   <div class="screenshots-header" style="padding:0 2rem">
     <p class="section-label">Gallery</p>
     <h2 class="section-title">See the <span class="accent-purple">worlds</span></h2>
+    <p class="section-desc">All in-game, real time.</p>
   </div>
-  <div class="screenshots-track-wrap">
-    <div class="screenshots-track" id="track"></div>
-  </div>
+  <div class="shots-grid" id="shots"></div>
 </section>
 
-<!-- WORLDS -->
 <section id="worlds">
   <div class="worlds-header">
     <p class="section-label">Maps</p>
     <h2 class="section-title">15 worlds to <span class="accent-cyan">explore</span></h2>
-    <p class="section-desc">Each map is a distinct environment with its own layout, atmosphere and flying style.</p>
+    <p class="section-desc">Real places and impossible ones, each with its own lines, atmosphere and easter eggs.</p>
   </div>
-  <div class="worlds-grid">
-    <div class="world-card"><div class="world-num">01</div><div class="world-name">Trippy Plains</div><div class="world-desc">Neon portals, rolling hills, and an Eiffel Tower to dive. The home world.</div></div>
-    <div class="world-card"><div class="world-num">02</div><div class="world-name">Central London</div><div class="world-desc">1:1 Westminster. Big Ben, Thames, Parliament interiors.</div></div>
-    <div class="world-card"><div class="world-num">03</div><div class="world-name">Starbase</div><div class="world-desc">Climbable rockets, tank farms, booster transporters. A certain South Texas vibe.</div></div>
-    <div class="world-card"><div class="world-num">04</div><div class="world-name">Speedway</div><div class="world-desc">Tight race circuit with beacon gates and live lap timing.</div></div>
-    <div class="world-card"><div class="world-num">05</div><div class="world-name">Twister</div><div class="world-desc">Banked corners, elevation changes. Technical and punishing.</div></div>
-    <div class="world-card"><div class="world-num">06</div><div class="world-name">Ruhrwerk Factory</div><div class="world-desc">Turbines, conveyors, two-storey interior space to thread.</div></div>
-    <div class="world-card"><div class="world-num">07</div><div class="world-name">Bando Resort</div><div class="world-desc">Abandoned leisure park. Crumbling pools, broken rooftops.</div></div>
-    <div class="world-card"><div class="world-num">08</div><div class="world-name">Atompark</div><div class="world-desc">Nuclear facility. Dive-through cooling towers and reactor buildings.</div></div>
-    <div class="world-card"><div class="world-num">09</div><div class="world-name">Wonderpark</div><div class="world-desc">Fairground at dusk. Ferris wheels spin, teacups rotate.</div></div>
-    <div class="world-card"><div class="world-num">10</div><div class="world-name">Field</div><div class="world-desc">Wide open countryside. Perfect for learning and high-speed runs.</div></div>
-    <div class="world-card"><div class="world-num">11</div><div class="world-name">Japan / Tokyo</div><div class="world-desc">Neon city streets, torii gates, dense urban skyline at night.</div></div>
-    <div class="world-card"><div class="world-num">12</div><div class="world-name">Runner</div><div class="world-desc">Corridor gauntlet. Speed gates, tight gaps, relentless flow.</div></div>
-    <div class="world-card"><div class="world-num">13</div><div class="world-name">Canyon Run</div><div class="world-desc">Desert gorge. Stone arches and slot-canyon gaps to thread at speed.</div></div>
-    <div class="world-card"><div class="world-num">14</div><div class="world-name">Fractal</div><div class="world-desc">A flyable fractal mind. Menger-sponge dives, golden-spiral gates, Mandelbrot monoliths.</div></div>
-    <div class="world-card"><div class="world-num">15</div><div class="world-name">Sandbox</div><div class="world-desc">Place your own obstacles. Design your own course.</div></div>
-  </div>
+  <div class="worlds-grid"><div class="world-card featured"><div class="world-num">01</div><div class="world-name">The Yard<span class="tag">NEW</span></div><div class="world-desc">Container terminal, steel frames, a site office and a drone assembly line. The default map.</div></div><div class="world-card featured"><div class="world-num">02</div><div class="world-name">Starbase<span class="tag">REBUILT</span></div><div class="world-desc">A Gulf-coast launch site: launch rockets, watch the booster catch, fly the beach and tidal flats.</div></div><div class="world-card"><div class="world-num">03</div><div class="world-name">Bando Resort</div><div class="world-desc">Unfinished concrete towers, cranes, stairwells through every floor and palm oases.</div></div><div class="world-card"><div class="world-num">04</div><div class="world-name">Ruhrwerk Factory</div><div class="world-desc">Hangars, Halle 7 and a full blast-furnace complex to thread.</div></div><div class="world-card featured"><div class="world-num">05</div><div class="world-name">Canyon Run<span class="tag">UPDATED</span></div><div class="world-desc">A desert gorge with a castle, a fire-breathing dragon, lava and a petrified forest.</div></div><div class="world-card"><div class="world-num">06</div><div class="world-name">Fractal</div><div class="world-desc">A flyable fractal mind: Menger-sponge dives, golden-spiral gates, unicorns and pegasi.</div></div><div class="world-card"><div class="world-num">07</div><div class="world-name">Central London</div><div class="world-desc">Big Ben, the London Eye, Parliament and the Thames.</div></div><div class="world-card"><div class="world-num">08</div><div class="world-name">Atompark</div><div class="world-desc">A nuclear plant with cooling towers and reactor buildings to dive.</div></div><div class="world-card"><div class="world-num">09</div><div class="world-name">Wonderpark</div><div class="world-desc">A fairground at dusk. Ferris wheels spin, teacups rotate.</div></div><div class="world-card"><div class="world-num">10</div><div class="world-name">Speedway</div><div class="world-desc">A tight race circuit with beacon gates and live lap timing.</div></div><div class="world-card"><div class="world-num">11</div><div class="world-name">Twister</div><div class="world-desc">Banked corners and elevation changes. Technical and punishing.</div></div><div class="world-card"><div class="world-num">12</div><div class="world-name">Runner</div><div class="world-desc">A corridor gauntlet: speed gates, tight gaps, relentless flow.</div></div><div class="world-card"><div class="world-num">13</div><div class="world-name">Field</div><div class="world-desc">Open countryside. Perfect for learning and high-speed runs.</div></div><div class="world-card"><div class="world-num">14</div><div class="world-name">Trippy Plains</div><div class="world-desc">The original home world: neon portals and rolling hills.</div></div><div class="world-card"><div class="world-num">15</div><div class="world-name">Sandbox</div><div class="world-desc">Place your own obstacles and design your own course.</div></div></div>
 </section>
 
-<!-- AIRCRAFT -->
 <section id="aircraft">
   <div class="aircraft-header">
     <p class="section-label">Fleet</p>
-    <h2 class="section-title">10 aircraft. <span class="accent-pink" style="color:var(--pink)">One simulator.</span></h2>
-    <p class="section-desc">Each craft has its own weight, motor response and handling profile. Find yours.</p>
+    <h2 class="section-title">10 aircraft. <span style="color:var(--pink)">One simulator.</span></h2>
+    <p class="section-desc">Each craft has its own weight, motor response and handling. Find yours.</p>
   </div>
   <div class="aircraft-grid">
     <div class="aircraft-card"><div class="aircraft-name">APEX 5</div><div class="aircraft-size">5" Freestyle</div><div class="aircraft-desc">Snappy, punchy, the all-rounder.</div></div>
@@ -570,60 +545,49 @@ footer{
   </div>
 </section>
 
-<!-- FLIGHT MODES -->
 <section id="modes">
   <div class="modes-inner">
     <p class="section-label">Flight Modes</p>
     <h2 class="section-title">Your pace. <span class="accent-purple">Your rules.</span></h2>
-    <p class="section-desc" style="margin:0 auto">Switch between modes at any time with a single key. No menus, no loading.</p>
+    <p class="section-desc" style="margin:0 auto">Switch modes at any time with a single key.</p>
     <div class="modes-row">
-      <div class="mode-card">
-        <span class="mode-badge badge-angle">Angle Mode</span>
-        <h3>Self-Levelling</h3>
-        <p>The drone holds itself level when you release the sticks. Pick it up in minutes. Perfect for beginners exploring any of the 15 worlds.</p>
-      </div>
-      <div class="mode-card acro">
-        <span class="mode-badge badge-acro">Acro Mode</span>
-        <h3>Full Manual</h3>
-        <p>No self-level. The drone goes exactly where you point it and stays there. The real FPV experience. Use it as a muscle-memory trainer for the real thing.</p>
-      </div>
+      <div class="mode-card"><span class="mode-badge badge-angle">Angle Mode</span><h3>Self-Levelling</h3><p>The drone levels itself when you let go of the sticks. Pick it up in minutes and explore every world.</p></div>
+      <div class="mode-card acro"><span class="mode-badge badge-acro">Acro Mode</span><h3>Full Manual</h3><p>No self-levelling. The drone goes exactly where you point it and stays there. The real FPV experience, and muscle memory for the real thing.</p></div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
+<section id="faq">
+  <div style="max-width:860px;margin:0 auto">
+    <p class="section-label">FAQ</p>
+    <h2 class="section-title">Good to <span class="accent-cyan">know</span></h2>
+  </div>
+  <div class="faq"><details><summary>Does Trippy Plains run on Mac?</summary><p>Yes. The Steam version runs on Windows and macOS (Apple Silicon and Intel, notarized by Apple). It is also on the Mac App Store.</p></details><details><summary>Is it on iPhone?</summary><p>Yes, on the App Store. On iPhone you fly with on-screen touch sticks; on a Mac you can use a keyboard, a gamepad or your radio.</p></details><details><summary>Which controllers work?</summary><p>FPV radio transmitters in USB joystick mode (including DJI remotes), Xbox, PlayStation and Switch Pro controllers, and keyboard. A calibration wizard maps any stick layout.</p></details><details><summary>Do I need a powerful PC?</summary><p>No. Trippy Plains is built to run smoothly on laptops, with quality modes for weaker hardware.</p></details><details><summary>Is there multiplayer?</summary><p>Yes, as a preview: online rooms through Steam, up to 8 pilots per room. Everyone in a room needs the same game version.</p></details><details><summary>Is it good for learning FPV?</summary><p>Yes. Start in angle mode, which levels itself, then switch to acro, the real FPV mode, when you are ready. The physics are tuned against a real 5-inch quad.</p></details><details><summary>Who makes it?</summary><p>A solo developer and FPV pilot, building with AI tools.</p></details></div>
+</section>
+
 <section id="cta">
   <div class="cta-inner">
     <h2>Ready to fly?</h2>
-    <p>Out now on Steam for Windows &amp; Mac, and on the App Store for iPhone &amp; iPad.</p>
+    <p>Out now on Steam for Windows and Mac, and on the App Store for iPhone and Mac.</p>
     <div class="badge-row">
-      <a class="steam-badge" href="https://store.steampowered.com/app/4866640" target="_blank">
-        <svg class="steam-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.606 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.455 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/></svg>
-        Get it on Steam
-      </a>
-      <a class="appstore-badge" href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" title="Download on the App Store">
-        <svg class="apple-icon" viewBox="0 0 814 1000" xmlns="http://www.w3.org/2000/svg"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-37.5-155.5-127.4C46 382.8-.2 262.5-.2 203.2c0-17.3 1.3-34.5 4.2-51.4 28.4-157.6 154.6-245.6 278.7-245.6 71.8 0 131.4 47.1 176.6 47.1 42.8 0 109.5-49.8 194.2-49.8 31.7 0 108.2 1.9 172.3 67.3zm-174.6-209.2c-34.5 40.8-93.4 72.3-147.7 72.3-5.2 0-10.3-.3-15.5-1-1.3-5.8-1.9-11.9-1.9-18.1 0-38.5 19.4-79.3 51.4-105.1 32-25.8 84-44.5 128.3-46.5.6 6.4 1 12.8 1 18.5 0 38.5-8.4 76.7-15.6 79.9z"/></svg>
-        <span class="appstore-badge-label">
-          <span class="appstore-badge-sub">Download on the</span>
-          <span class="appstore-badge-name">App Store</span>
-        </span>
+      <a class="steam-badge" href="https://store.steampowered.com/app/4866640/?utm_source=website&amp;utm_medium=site&amp;utm_campaign=latest" target="_blank" rel="noopener"><svg class="steam-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.606 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.455 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/></svg> Get it on Steam</a>
+      <a class="appstore-badge" href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" rel="noopener" title="Download on the App Store"><svg class="apple-icon" viewBox="0 0 814 1000" xmlns="http://www.w3.org/2000/svg"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-37.5-155.5-127.4C46 382.8-.2 262.5-.2 203.2c0-17.3 1.3-34.5 4.2-51.4 28.4-157.6 154.6-245.6 278.7-245.6 71.8 0 131.4 47.1 176.6 47.1 42.8 0 109.5-49.8 194.2-49.8 31.7 0 108.2 1.9 172.3 67.3zm-174.6-209.2c-34.5 40.8-93.4 72.3-147.7 72.3-5.2 0-10.3-.3-15.5-1-1.3-5.8-1.9-11.9-1.9-18.1 0-38.5 19.4-79.3 51.4-105.1 32-25.8 84-44.5 128.3-46.5.6 6.4 1 12.8 1 18.5 0 38.5-8.4 76.7-15.6 79.9z"/></svg>
+        <span class="appstore-badge-label"><span class="appstore-badge-sub">Download on the</span><span class="appstore-badge-name">App Store</span></span>
       </a>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <span class="footer-logo">Trippy Plains</span>
   <ul class="footer-links">
-    <li><a href="https://store.steampowered.com/app/4866640" target="_blank">Steam Store</a></li>
-    <li><a href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank">App Store</a></li>
+    <li><a href="https://store.steampowered.com/app/4866640/?utm_source=website&amp;utm_medium=site&amp;utm_campaign=latest" target="_blank" rel="noopener">Steam Store</a></li>
+    <li><a href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" rel="noopener">App Store</a></li>
     <li><a href="privacy.html">Privacy Policy</a></li>
   </ul>
   <span class="footer-copy">&copy; 2026 The Best. All rights reserved.</span>
 </footer>
 
-<!-- LIGHTBOX -->
 <div id="lightbox" role="dialog" aria-modal="true">
   <button id="lightbox-close" aria-label="Close">&times;</button>
   <button id="lightbox-prev" aria-label="Previous">&#8592;</button>
@@ -702,29 +666,17 @@ resize(); initParticles(); frame();
 window.addEventListener('resize', () => { resize(); initParticles(); });
 
 // ── Screenshots track ────────────────────────────────────────────────────────
-const shots = [
-  'Screenshot 2026-06-16 at 20.33.14.jpg',
-  'Screenshot 2026-06-16 at 20.44.58.jpg',
-  'Screenshot 2026-06-16 at 20.51.46.jpg',
-  'Screenshot 2026-06-16 at 20.52.24.jpg',
-  'Screenshot 2026-06-16 at 20.53.40.jpg',
-  'Screenshot 2026-06-16 at 20.54.40.jpg',
-  'Screenshot 2026-06-16 at 20.55.25.jpg',
-  'Screenshot 2026-06-16 at 20.56.11.jpg',
-  'Screenshot 2026-06-16 at 20.57.09.jpg',
-  'Screenshot 2026-06-16 at 20.57.35.jpg',
-  'Screenshot 2026-06-16 at 20.58.04.jpg',
-];
+const shots = ["01_starbase_liftoff.jpg", "05_yard_drone_assembly_line.jpg", "04_canyon_dragon_fire.jpg", "08_container_terminal.jpg", "02_starbase_booster_return.jpg", "06_bando_shell_xl_dusk.jpg", "10_ai_wingmen_chase.jpg", "07_fractal_unicorn_herd.jpg", "09_steel_frame.jpg", "12_canyon_volcano_sunset.jpg", "03_starbase_milky_way.jpg", "11_bando_rooftop_pool.jpg", "13_portals.jpg"];
 
-const track = document.getElementById('track');
-// duplicate for seamless loop — clicks open lightbox at correct index
-[...shots, ...shots].forEach((name, i) => {
+const grid = document.getElementById('shots');
+shots.forEach((name, i) => {
   const img = document.createElement('img');
-  img.src = 'screenshots/' + name;
-  img.alt = 'Trippy Plains screenshot';
-  img.addEventListener('click', () => openLightbox(i % shots.length));
-  track.appendChild(img);
+  img.src = 'screenshots/v24/' + name; img.loading = 'lazy';
+  img.alt = 'Trippy Plains screenshot: ' + name.replace(/^\d+_|\.jpg$/g,'').replace(/_/g,' ');
+  img.addEventListener('click', () => openLightbox(i));
+  grid.appendChild(img);
 });
+document.querySelectorAll('[data-shot]').forEach(img => img.addEventListener('click', () => openLightbox(Math.max(0, shots.indexOf(img.dataset.shot)))));
 
 // ── Lightbox with prev/next navigation ───────────────────────────────────────
 const lb = document.getElementById('lightbox');
@@ -734,7 +686,7 @@ let lbIndex = 0;
 
 function openLightbox(idx) {
   lbIndex = ((idx % shots.length) + shots.length) % shots.length;
-  lbImg.src = 'screenshots/' + shots[lbIndex];
+  lbImg.src = 'screenshots/v24/' + shots[lbIndex];
   lbCounter.textContent = (lbIndex + 1) + ' / ' + shots.length;
   lb.classList.add('open');
 }
@@ -764,7 +716,7 @@ lb.addEventListener('touchend', e => {
 const style = document.createElement('style');
 style.textContent = `.fade-in{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}.fade-in.visible{opacity:1;transform:none}`;
 document.head.appendChild(style);
-document.querySelectorAll('.feature-card,.world-card,.aircraft-card,.mode-card').forEach(el => {
+document.querySelectorAll('.feature-card,.world-card,.aircraft-card,.mode-card,.new-card').forEach(el => {
   el.classList.add('fade-in');
 });
 const io = new IntersectionObserver(entries => {
