@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trippy Plains: FPV Drone Simulator for Windows, Mac and iPhone</title>
 <meta name="description" content="FPV drone simulator. Learn FPV with 50 step-by-step lessons, from your first hover to your first flip, then fly 21 maps: a giant chess set, an ancient city, London with its Tube, a sea cave and Mars. On Steam for Windows and Mac.">
+<meta name="theme-color" content="#0a0612">
 <link rel="canonical" href="https://trippyplains.com/">
 <link rel="icon" href="assets/icon.png">
 <meta property="og:type" content="website">
@@ -20,411 +21,201 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "Trippy Plains", "alternateName": "Trippy Plains: FPV Drone Simulator", "url": "https://trippyplains.com/", "image": "https://trippyplains.com/screenshots/v31/01_checkmate_rook_golden_hour.jpg", "description": "FPV drone simulator with 50 step-by-step lessons (ANGLE and ACRO), 21 maps and 12 drones, from a giant marble chess set and an ancient city to London, a sea cave and Mars. Physics tuned by a real FPV pilot. On Steam for Windows and Mac; an older version is on the App Store.", "genre": ["Simulation", "Flight"], "gamePlatform": ["Windows", "macOS", "iOS"], "applicationCategory": "Game", "operatingSystem": "Windows, macOS, iOS", "playMode": ["SinglePlayer", "MultiPlayer"], "author": {"@type": "Person", "name": "Michal Kowalski"}, "offers": [{"@type": "Offer", "url": "https://store.steampowered.com/app/4866640/", "seller": {"@type": "Organization", "name": "Steam"}}, {"@type": "Offer", "url": "https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665", "seller": {"@type": "Organization", "name": "App Store"}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does Trippy Plains run on Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The Steam version runs on Windows and macOS (Apple Silicon and Intel, notarized by Apple). An older version is also on the App Store."}}, {"@type": "Question", "name": "Is it on iPhone?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, on the App Store. It is a separate, older version: it does not have the v31 maps yet. On iPhone you fly with on-screen touch sticks."}}, {"@type": "Question", "name": "Which controllers work?", "acceptedAnswer": {"@type": "Answer", "text": "FPV radios in USB joystick mode, gamepads and keyboard. Calibrate the sticks in the game, then put ARM, RESET, NEXT MAP and more on any button."}}, {"@type": "Question", "name": "Do I need a powerful PC?", "acceptedAnswer": {"@type": "Answer", "text": "No. Trippy Plains is built to run smoothly on laptops, with quality modes for weaker hardware. Q switches between fast and full quality."}}, {"@type": "Question", "name": "Is there multiplayer?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, as a preview in the Steam version: online rooms through Steam, up to 8 pilots per room. Everyone in a room needs the same game version."}}, {"@type": "Question", "name": "Is it good for learning FPV?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The BEGINNER field has 50 step-by-step lessons: 25 in ANGLE mode, which levels itself, and 25 in ACRO, the real FPV mode, up to your first flip and a split-S. The physics are tuned against a real 5-inch quad."}}, {"@type": "Question", "name": "Why does the camera say FoV 83?", "acceptedAnswer": {"@type": "Answer", "text": "The game measures FoV from top to bottom of the screen. 83 is about 115 degrees from side to side on a 16:9 screen. You can change it in TAB, Camera."}}, {"@type": "Question", "name": "Who makes it?", "acceptedAnswer": {"@type": "Answer", "text": "A solo developer and FPV pilot, building with AI tools."}}]}</script>
 <style>
+/* TRIPPY BASS: the look of the game's own menus (near-black, acid green, hot pink, cyan, violet, orange; chunky offset buttons) */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#07000f;
-  --bg2:#0d0020;
-  --bg3:#100030;
-  --purple:#b44fff;
-  --cyan:#00f5d4;
-  --pink:#ff2d87;
-  --white:#f0eaff;
-  --muted:#9988bb;
-  --card:#140028;
-  --card-border:rgba(180,79,255,0.25);
+  --bg:#0a0612;--bg2:#0e0819;--card:#120a1e;--ink:#f4f0ff;--mut:#c9bce6;--mut2:#a493c4;
+  --g:#c6ff00;--p:#ff2d95;--c:#00e5ff;--v:#7b2dff;--o:#ff9f1c;--y:#ffe600;
+  --rb:linear-gradient(90deg,#7b2dff,#ff2d95,#ff9f1c,#c6ff00,#00e5ff);
+  --fb:"Avenir Next","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --fh:"Avenir Next Condensed","Bahnschrift SemiCondensed","Bahnschrift","Roboto Condensed",sans-serif-condensed,"Arial Narrow",sans-serif;
 }
 html{scroll-behavior:smooth}
-body{
-  background:var(--bg);
-  color:var(--white);
-  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
-  font-size:16px;
-  line-height:1.7;
-  overflow-x:hidden;
-}
+body{background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:16px;line-height:1.65;overflow-x:hidden}
+a{color:inherit}
+#bg-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.5}
 
-/* ── CANVAS BACKGROUND ─────────────────────────────────── */
-#bg-canvas{
-  position:fixed;
-  top:0;left:0;width:100%;height:100%;
-  z-index:0;
-  pointer-events:none;
-  opacity:0.55;
-}
-
-/* ── NAV ────────────────────────────────────────────────── */
-nav{
-  position:fixed;top:0;left:0;width:100%;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:1rem 2.5rem;
-  background:rgba(7,0,15,0.8);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(180,79,255,0.15);
-}
-.nav-logo{
-  font-size:1.1rem;font-weight:700;letter-spacing:.08em;
-  background:linear-gradient(90deg,var(--purple),var(--cyan));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  text-transform:uppercase;
-}
-.nav-links{display:flex;gap:2rem;list-style:none}
-.nav-links a{
-  color:var(--muted);text-decoration:none;font-size:.85rem;
-  letter-spacing:.05em;text-transform:uppercase;
-  transition:color .2s;
-}
-.nav-links a:hover{color:var(--cyan)}
-.nav-steam{
-  display:inline-flex;align-items:center;gap:.5rem;
-  background:var(--purple);color:#fff;
-  text-decoration:none;font-size:.85rem;font-weight:600;
-  padding:.5rem 1.2rem;border-radius:6px;
-  letter-spacing:.04em;
-  transition:background .2s,transform .15s;
-}
-.nav-steam:hover{background:#9b35e8;transform:translateY(-1px)}
-.nav-appstore{
-  display:inline-flex;align-items:center;gap:.5rem;
-  background:rgba(255,255,255,0.10);color:#fff;
-  text-decoration:none;font-size:.85rem;font-weight:600;
-  padding:.5rem 1.2rem;border-radius:6px;
-  letter-spacing:.04em;
-  border:1px solid rgba(255,255,255,0.12);
-  transition:background .2s,color .2s;
-  cursor:pointer;position:relative;
-}
-.nav-appstore:hover{background:rgba(255,255,255,0.16);color:#fff;transform:translateY(-1px)}
-.nav-buttons{display:flex;align-items:center;gap:.6rem}
-
-/* ── HERO ───────────────────────────────────────────────── */
-#hero{
-  position:relative;z-index:1;
-  min-height:100vh;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;
-  padding:8rem 2rem 4rem;
-}
-.hero-eyebrow{
-  font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;
-  color:var(--cyan);margin-bottom:1.5rem;
-  opacity:.85;
-}
-.hero-title{
-  font-size:clamp(3rem,9vw,7rem);
-  font-weight:800;
-  line-height:.95;
-  letter-spacing:-.02em;
-  background:linear-gradient(135deg,#fff 0%,var(--purple) 50%,var(--cyan) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  margin-bottom:1rem;
-}
-.hero-sub{
-  font-size:clamp(1rem,2.5vw,1.4rem);
-  color:var(--muted);
-  max-width:640px;
-  margin:0 auto 2.5rem;
-  line-height:1.5;
-}
-.hero-cta{
-  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
-  margin-bottom:3rem;
-}
-.btn-primary{
-  display:inline-flex;align-items:center;gap:.6rem;
-  background:linear-gradient(135deg,var(--purple),#7022cc);
-  color:#fff;text-decoration:none;
-  font-size:1rem;font-weight:700;letter-spacing:.04em;
-  padding:.9rem 2.2rem;border-radius:8px;
-  border:none;cursor:pointer;
-  transition:transform .15s,box-shadow .2s;
-  box-shadow:0 0 24px rgba(180,79,255,0.4);
-}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(180,79,255,0.6)}
-.btn-secondary{
-  display:inline-flex;align-items:center;gap:.6rem;
-  background:transparent;color:var(--white);text-decoration:none;
-  font-size:1rem;font-weight:600;letter-spacing:.04em;
-  padding:.9rem 2.2rem;border-radius:8px;
-  border:1px solid rgba(255,255,255,0.2);cursor:pointer;
-  transition:border-color .2s,transform .15s;
-}
-.btn-secondary:hover{border-color:var(--cyan);transform:translateY(-2px)}
-.hero-stats{
-  display:flex;gap:3rem;justify-content:center;flex-wrap:wrap;
-  margin-top:1rem;
-}
-.hero-stat{text-align:center}
-.hero-stat-n{
-  display:block;font-size:2.2rem;font-weight:800;
-  background:linear-gradient(135deg,var(--purple),var(--cyan));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.hero-stat-l{font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
-.hero-scroll{
-  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:.5rem;
-  color:var(--muted);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
-  animation:bob 2s ease-in-out infinite;
-}
-.scroll-arrow{width:20px;height:20px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg)}
-@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
-
-/* ── SECTION SHARED ─────────────────────────────────────── */
+/* ── shared bits ── */
 section{position:relative;z-index:1;padding:6rem 2rem}
-.section-label{
-  font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;
-  color:var(--cyan);margin-bottom:.75rem;
-}
-.section-title{
-  font-size:clamp(1.8rem,4vw,3rem);font-weight:800;
-  line-height:1.1;margin-bottom:1rem;
-}
-.section-desc{color:var(--muted);max-width:620px;font-size:1.05rem}
-.accent-purple{color:var(--purple)}
-.accent-cyan{color:var(--cyan)}
+.wrap{max-width:1140px;margin:0 auto}
+.eyebrow{display:inline-block;background:var(--p);color:#2b0016;font:800 .78rem/1.2 var(--fh);letter-spacing:.2em;text-transform:uppercase;padding:4px 12px;transform:skewX(-10deg);margin-bottom:1.1rem}
+.eyebrow.g{background:var(--g);color:#1a2600}.eyebrow.c{background:var(--c);color:#002a30}.eyebrow.o{background:var(--o);color:#2a1500}.eyebrow.v{background:var(--v);color:#fff}
+.h2{font:italic 900 clamp(2.1rem,5.4vw,3.6rem)/1.02 var(--fh);text-transform:uppercase;letter-spacing:.01em;color:var(--ink);text-shadow:-3px -2px 0 var(--c),3px 2px 0 var(--p);margin-bottom:1rem}
+.h2 .acc{color:var(--g);text-shadow:-3px -2px 0 var(--v),3px 2px 0 var(--p)}
+.lead{color:var(--mut);max-width:640px;font-size:1.05rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font:800 1.05rem/1 var(--fh);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:1rem 2rem;border:3px solid var(--bg);transform:skewX(-10deg);transition:transform .15s,background .15s,box-shadow .15s;cursor:pointer}
+.btn-g{background:var(--g);color:var(--bg);box-shadow:6px 6px 0 var(--p)}
+.btn-g:hover,.btn-g:focus-visible{background:var(--y);transform:skewX(-10deg) translate(-2px,-2px);box-shadow:8px 8px 0 var(--p)}
+.btn-k{background:#000;color:var(--c);border-color:var(--c);box-shadow:6px 6px 0 var(--v)}
+.btn-k:hover,.btn-k:focus-visible{background:var(--c);color:var(--bg);transform:skewX(-10deg) translate(-2px,-2px)}
+.rbline{height:3px;background:var(--rb);border:0}
 
-/* ── FEATURES ───────────────────────────────────────────── */
-#features{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%)}
-.features-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:1.5rem;
-  max-width:1100px;margin:3rem auto 0;
-}
-.feature-card{
-  background:var(--card);
-  border:1px solid var(--card-border);
-  border-radius:12px;
-  padding:1.75rem;
-  transition:border-color .2s,transform .2s;
-}
-.feature-card:hover{border-color:var(--purple);transform:translateY(-3px)}
-.feature-icon{
-  font-size:2rem;margin-bottom:1rem;
-  display:block;
-}
-.feature-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.5rem}
-.feature-card p{color:var(--muted);font-size:.9rem;line-height:1.6}
+/* ── nav ── */
+nav{position:fixed;top:0;left:0;width:100%;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 2rem;background:rgba(10,6,18,.93);backdrop-filter:blur(10px);border-bottom:3px solid;border-image:var(--rb) 1}
+.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;font:700 .95rem var(--fh);letter-spacing:.2em;text-transform:uppercase;color:var(--ink);white-space:nowrap}
+.brand img{width:34px;height:34px;border-radius:8px}
+.nav-links{display:flex;gap:1.6rem;list-style:none}
+.nav-links a{color:var(--mut);text-decoration:none;font:700 .85rem var(--fh);letter-spacing:.14em;text-transform:uppercase;transition:color .15s}
+.nav-links li:nth-child(5n+1) a:hover{color:var(--g)}.nav-links li:nth-child(5n+2) a:hover{color:var(--p)}.nav-links li:nth-child(5n+3) a:hover{color:var(--c)}.nav-links li:nth-child(5n+4) a:hover{color:var(--o)}.nav-links li:nth-child(5n+5) a:hover{color:#b48cff}
+.nav-buttons{display:flex;gap:.7rem;align-items:center}
+.nav-steam{background:var(--g);color:var(--bg);font:800 .85rem/1 var(--fh);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:.6rem 1.1rem;transform:skewX(-10deg);box-shadow:4px 4px 0 var(--p);white-space:nowrap}
+.nav-steam:hover{background:var(--y)}
+.nav-app{border:2px solid var(--p);color:#ff9fcf;font:700 .8rem/1 var(--fh);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;padding:.55rem .9rem;white-space:nowrap}
+.nav-app:hover{background:var(--p);color:var(--bg)}
 
-/* ── SCREENSHOTS ────────────────────────────────────────── */
-#screenshots{background:var(--bg2)}
-.screenshots-header{max-width:1100px;margin:0 auto 2.5rem;padding:0 2rem}
+/* ── hero ── */
+#hero{min-height:100vh;display:flex;align-items:center;padding:7.5rem 2rem 6rem;overflow:hidden}
+#hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:110px;pointer-events:none;opacity:.22;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 120' preserveAspectRatio='none'%3E%3Cg fill='none' stroke-width='4'%3E%3Cpath d='M0 40 Q 30 20 60 40 T 120 40 T 180 40 T 240 40 T 300 40 T 360 40 T 420 40 T 480 40' stroke='%23c6ff00'/%3E%3Cpath d='M0 66 Q 30 46 60 66 T 120 66 T 180 66 T 240 66 T 300 66 T 360 66 T 420 66 T 480 66' stroke='%23ff2d95'/%3E%3Cpath d='M0 92 Q 30 72 60 92 T 120 92 T 180 92 T 240 92 T 300 92 T 360 92 T 420 92 T 480 92' stroke='%2300e5ff'/%3E%3C/g%3E%3C/svg%3E") repeat-x bottom/480px 120px}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:3rem;align-items:center;max-width:1180px;margin:0 auto;width:100%}
+.hero-new{display:inline-block;border:2px solid var(--g);color:var(--g);font:800 .78rem/1.3 var(--fh);letter-spacing:.14em;text-transform:uppercase;padding:.35rem .8rem;margin:0 0 1.2rem .6rem;transform:skewX(-10deg)}
+h1.title{font:900 clamp(4rem,10.5vw,8.4rem)/.86 var(--fh);text-transform:uppercase;letter-spacing:-.005em;margin-bottom:1.6rem}
+h1.title span{display:block}
+h1.title .t1{color:var(--ink);text-shadow:-5px -4px 0 var(--c),5px 4px 0 var(--p)}
+h1.title .t2{color:var(--g);text-shadow:-5px -4px 0 var(--v),5px 4px 0 var(--p)}
+.hero-sub{color:var(--mut);font-size:clamp(1rem,1.6vw,1.18rem);max-width:560px;margin-bottom:2rem}
+.hero-cta{display:flex;gap:1.3rem;flex-wrap:wrap;margin:0 0 1.6rem .4rem}
+.platforms{color:var(--mut2);font-size:.85rem;letter-spacing:.05em}
+.stats{display:flex;flex-wrap:wrap;gap:1rem 2.4rem;margin-top:2rem;border-top:2px solid var(--v);padding-top:1.2rem}
+.stat b{display:block;font:900 2.6rem/1 var(--fh)}
+.stat span{font:700 .78rem var(--fh);letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}
+.stat:nth-child(1) b{color:var(--g)}.stat:nth-child(2) b{color:var(--c)}.stat:nth-child(3) b{color:var(--p)}.stat:nth-child(4) b{color:var(--o)}
+.stat-note{width:100%;color:var(--mut2);font-size:.78rem;letter-spacing:.05em}
+.drone{position:relative;width:100%;max-width:560px;aspect-ratio:1;margin:0 auto;display:flex;align-items:center;justify-content:center}
+.drone::before{content:"";position:absolute;inset:0;border-radius:50%;
+  background:repeating-radial-gradient(circle,#0a0612 0 16px,#7b2dff 16px 24px,#0a0612 24px 40px,#ff2d95 40px 48px,#0a0612 48px 64px,#00e5ff 64px 72px,#0a0612 72px 88px,#c6ff00 88px 96px,#0a0612 96px 112px,#ff9f1c 112px 120px);
+  animation:tbPulse 2.76s ease-in-out infinite}
+.drone::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:3px solid var(--v)}
+.drone svg{position:relative;width:92%;height:auto;animation:tbFloat 2.76s ease-in-out infinite}
+.drone-cap{display:flex;justify-content:space-between;max-width:560px;margin:1rem auto 0;font:700 .8rem var(--fh);letter-spacing:.16em;text-transform:uppercase;border-top:2px solid var(--p);padding-top:.6rem}
+.drone-cap span:first-child{color:var(--c)}.drone-cap span:last-child{color:var(--o)}
+@keyframes tbPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes tbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
-/* ── LIGHTBOX ───────────────────────────────────────────── */
-#lightbox{
-  display:none;position:fixed;inset:0;z-index:999;
-  background:rgba(0,0,0,.92);
-  align-items:center;justify-content:center;
-}
-#lightbox.open{display:flex}
-#lightbox-img{
-  max-width:88vw;max-height:85vh;
-  border-radius:8px;
-  border:1px solid rgba(180,79,255,0.3);
-  user-select:none;
-}
-#lightbox-close{
-  position:absolute;top:1.25rem;right:1.5rem;
-  font-size:2rem;color:var(--white);cursor:pointer;
-  background:none;border:none;line-height:1;
-  opacity:.7;transition:opacity .15s;
-}
-#lightbox-close:hover{opacity:1}
-#lightbox-prev,#lightbox-next{
-  position:absolute;top:50%;transform:translateY(-50%);
-  font-size:2rem;color:var(--white);cursor:pointer;
-  background:rgba(180,79,255,0.15);
-  border:1px solid rgba(180,79,255,0.3);
-  border-radius:50%;width:52px;height:52px;
-  display:flex;align-items:center;justify-content:center;
-  transition:background .15s,transform .15s;
-  user-select:none;
-}
-#lightbox-prev:hover,#lightbox-next:hover{background:rgba(180,79,255,0.4);transform:translateY(-50%) scale(1.08)}
-#lightbox-prev{left:1.5rem}
-#lightbox-next{right:1.5rem}
-#lightbox-counter{
-  position:absolute;bottom:1.25rem;left:50%;transform:translateX(-50%);
-  font-size:.8rem;letter-spacing:.1em;color:var(--muted);
-}
-
-/* ── WORLDS ─────────────────────────────────────────────── */
-#worlds{background:linear-gradient(180deg,var(--bg2) 0%,var(--bg3) 100%)}
-.worlds-header{max-width:1100px;margin:0 auto 2.5rem}
-.worlds-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:1rem;
-  max-width:1100px;margin:0 auto;
-}
-.world-card{
-  background:var(--card);
-  border:1px solid var(--card-border);
-  border-radius:10px;
-  padding:1.25rem 1.5rem;
-  transition:border-color .2s,transform .2s;
-  cursor:default;
-}
-.world-card:hover{border-color:var(--cyan);transform:translateY(-2px)}
-.world-num{
-  font-size:.7rem;letter-spacing:.15em;
-  color:var(--cyan);margin-bottom:.4rem;
-  font-weight:600;
-}
-.world-name{font-size:1rem;font-weight:700;margin-bottom:.3rem}
-.world-desc{font-size:.82rem;color:var(--muted);line-height:1.5}
-
-/* ── AIRCRAFT ───────────────────────────────────────────── */
-#aircraft{background:var(--bg3)}
-.aircraft-header{max-width:1100px;margin:0 auto 2.5rem}
-.aircraft-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:1rem;
-  max-width:1100px;margin:0 auto;
-}
-.aircraft-card{
-  background:var(--card);
-  border:1px solid var(--card-border);
-  border-radius:10px;
-  padding:1.25rem;
-  display:flex;flex-direction:column;gap:.35rem;
-  transition:border-color .2s,transform .2s;
-}
-.aircraft-card:hover{border-color:var(--pink);transform:translateY(-2px)}
-.aircraft-name{font-size:.95rem;font-weight:700;color:var(--white)}
-.aircraft-size{font-size:.75rem;color:var(--purple);font-weight:600;letter-spacing:.05em}
-.aircraft-desc{font-size:.82rem;color:var(--muted)}
-
-/* ── MODES ──────────────────────────────────────────────── */
-#modes{
-  background:linear-gradient(180deg,var(--bg3) 0%,var(--bg) 100%);
-  text-align:center;
-}
-.modes-inner{max-width:860px;margin:0 auto}
-.modes-row{
-  display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;
-  margin-top:3rem;
-}
-.mode-card{
-  background:var(--card);
-  border:1px solid var(--card-border);
-  border-radius:14px;
-  padding:2.5rem 2rem;
-}
-.mode-card.acro{border-color:rgba(255,45,135,0.3)}
-.mode-badge{
-  display:inline-block;
-  font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
-  font-weight:700;padding:.3rem .8rem;border-radius:4px;
-  margin-bottom:1rem;
-}
-.badge-angle{background:rgba(0,245,212,0.15);color:var(--cyan)}
-.badge-acro{background:rgba(255,45,135,0.15);color:var(--pink)}
-.mode-card h3{font-size:1.4rem;font-weight:800;margin-bottom:.75rem}
-.mode-card p{color:var(--muted);font-size:.95rem}
-
-/* ── CTA BANNER ─────────────────────────────────────────── */
-#cta{
-  background:var(--bg);
-  text-align:center;
-  padding:7rem 2rem;
-}
-.cta-inner{max-width:700px;margin:0 auto}
-.cta-inner h2{
-  font-size:clamp(2rem,5vw,3.5rem);font-weight:800;
-  margin-bottom:1rem;
-  background:linear-gradient(135deg,var(--white) 30%,var(--purple) 70%,var(--cyan));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.cta-inner p{color:var(--muted);font-size:1.1rem;margin-bottom:2.5rem}
-.badge-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
-.steam-badge{
-  display:inline-flex;align-items:center;gap:.75rem;
-  background:#1b2838;
-  border:1px solid rgba(255,255,255,0.1);
-  color:#fff;text-decoration:none;
-  font-size:1rem;font-weight:600;
-  padding:1rem 2rem;border-radius:8px;
-  transition:background .2s,transform .15s;
-}
-.steam-badge:hover{background:#2a3f5f;transform:translateY(-2px)}
-.appstore-badge{
-  display:inline-flex;align-items:center;gap:.75rem;
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.12);
-  color:#fff;text-decoration:none;
-  font-size:1rem;font-weight:600;
-  padding:1rem 2rem;border-radius:8px;
-  transition:background .2s,transform .15s;
-  cursor:pointer;
-  position:relative;
-}
-.appstore-badge:hover{background:rgba(255,255,255,0.12);transform:translateY(-2px)}
-.appstore-badge-label{display:flex;flex-direction:column;align-items:flex-start}
-.appstore-badge-sub{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-bottom:.1rem}
-.appstore-badge-name{font-size:1rem;font-weight:700}
-
-/* ── FOOTER ─────────────────────────────────────────────── */
-footer{
-  background:var(--bg);
-  border-top:1px solid rgba(180,79,255,0.1);
-  padding:2rem 2.5rem;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:1rem;
-}
-.footer-logo{
-  font-size:.9rem;font-weight:700;letter-spacing:.08em;
-  background:linear-gradient(90deg,var(--purple),var(--cyan));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  text-transform:uppercase;
-}
-.footer-links{display:flex;gap:1.5rem;list-style:none}
-.footer-links a{color:var(--muted);text-decoration:none;font-size:.82rem;transition:color .2s}
-.footer-links a:hover{color:var(--cyan)}
-.footer-copy{color:var(--muted);font-size:.8rem}
-
-/* ── RESPONSIVE ─────────────────────────────────────────── */
-@media(max-width:680px){
-  nav{padding:.8rem 1.25rem}
-  .nav-links{display:none}
-  .modes-row{grid-template-columns:1fr}
-  footer{flex-direction:column;text-align:center}
-  .footer-links{justify-content:center}
-}
-
-/* ── latest additions ─────────────────────────────────────── */
-#hero{background:linear-gradient(180deg,rgba(7,0,15,.55) 0%,rgba(7,0,15,.35) 45%,var(--bg) 100%),url('screenshots/v24/hero_milky_way.jpg') center/cover no-repeat}
-.hero-sub{color:#d9cdf5}
-.hero-badge{display:inline-block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#07000f;background:var(--cyan);padding:.3rem .8rem;border-radius:4px;margin-bottom:1.2rem}
-.platforms{margin-top:.25rem;color:var(--muted);font-size:.85rem;letter-spacing:.06em}
-.stat-note{margin-top:1rem;color:var(--muted);font-size:.75rem;letter-spacing:.06em}
+/* ── cards ── */
+.cards{display:grid;gap:1.6rem;margin-top:3rem}
+.card{background:var(--card);border:3px solid var(--v);transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--p)}
+.cyc>*:nth-child(5n+1){border-color:var(--v)}.cyc>*:nth-child(5n+2){border-color:var(--p)}.cyc>*:nth-child(5n+3){border-color:var(--c)}.cyc>*:nth-child(5n+4){border-color:var(--g)}.cyc>*:nth-child(5n+5){border-color:var(--o)}
+.card h3{font:italic 800 1.25rem/1.15 var(--fh);text-transform:uppercase;letter-spacing:.03em;margin-bottom:.45rem}
+.cyc>*:nth-child(5n+1) h3{color:var(--g)}.cyc>*:nth-child(5n+2) h3{color:var(--p)}.cyc>*:nth-child(5n+3) h3{color:var(--c)}.cyc>*:nth-child(5n+4) h3{color:var(--y)}.cyc>*:nth-child(5n+5) h3{color:var(--o)}
+.card p{color:var(--mut);font-size:.92rem;line-height:1.6}
+.card .body{padding:1.25rem 1.4rem 1.5rem}
+.card img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;cursor:pointer}
+.new3{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.new5{grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:1.6rem}
+.note{color:var(--mut2);font-size:.88rem;margin-top:1.6rem}
 #new{background:var(--bg)}
-.new-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;max-width:1100px;margin:3rem auto 0}
-.new-grid.small{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:1.5rem}
-.new-card{background:var(--card);border:1px solid var(--card-border);border-radius:12px;overflow:hidden;transition:border-color .2s,transform .2s}
-.new-card:hover{border-color:var(--purple);transform:translateY(-3px)}
-.new-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;cursor:pointer}
-.new-card .body{padding:1.25rem 1.4rem 1.5rem}
-.new-card h3{font-size:1.1rem;font-weight:700;margin-bottom:.4rem}
-.new-card p{color:var(--muted);font-size:.9rem;line-height:1.6}
-.new-note{max-width:1100px;margin:1.5rem auto 0;color:var(--muted);font-size:.85rem}
-.shots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.8rem;max-width:1100px;margin:0 auto;padding:0 2rem}
-.shots-grid img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;border:1px solid var(--card-border);cursor:pointer;transition:transform .2s,border-color .2s}
-.shots-grid img:hover{transform:scale(1.03);border-color:var(--cyan)}
+
+/* ── mini games tile, like the start screen ── */
+.mg{display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:center;background:#000;border:3px solid var(--o);box-shadow:8px 8px 0 var(--p);padding:1.6rem 1.8rem;margin-top:3.5rem}
+.mg h3{font:italic 900 clamp(1.9rem,4vw,2.8rem)/1 var(--fh);color:var(--o);text-transform:uppercase;display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1rem}
+.mg h3 small{font:italic 800 .95rem var(--fh);letter-spacing:.14em;color:var(--g)}
+.mg p{color:var(--ink);margin:.6rem 0 1rem}
+.chips{display:flex;flex-wrap:wrap;gap:.55rem}
+.chip{font:italic 800 .82rem/1 var(--fh);letter-spacing:.1em;text-transform:uppercase;padding:.42rem .7rem;border:2px solid var(--g);color:var(--g);background:transparent}
+.chip:nth-child(6n+2){border-color:var(--c);color:var(--c)}.chip:nth-child(6n+3){border-color:var(--p);color:var(--p)}.chip:nth-child(6n+4){border-color:var(--y);color:var(--y)}.chip:nth-child(6n+5){border-color:var(--o);color:var(--o)}.chip:nth-child(6n+6){border-color:#b48cff;color:#b48cff}
+.mg-n{background:var(--o);color:var(--bg);font:italic 900 1rem/1 var(--fh);letter-spacing:.1em;text-transform:uppercase;text-align:center;padding:1.2rem 1.4rem;transform:skewX(-6deg)}
+.mg-n b{display:block;font-size:3.4rem;line-height:.95}
+
+/* ── features ── */
+#features{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%)}
+.feat{grid-template-columns:repeat(auto-fit,minmax(245px,1fr))}
+.feat .card{padding:1.6rem}
+.ico{display:block;font-size:1.9rem;margin-bottom:.8rem}
+
+/* ── gallery ── */
+#screenshots{background:var(--bg2)}
+.filters{display:flex;flex-wrap:wrap;gap:.6rem;margin:2rem 0 1.6rem}
+.filters button{cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--g);color:var(--bg);border-color:var(--g)}
+.filters button:nth-child(2)[aria-pressed="true"]{background:var(--c);border-color:var(--c)}
+.filters button:nth-child(3)[aria-pressed="true"]{background:var(--p);border-color:var(--p)}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem}
+.shot{position:relative;border:3px solid var(--v);background:#000;cursor:pointer;overflow:hidden;transition:transform .15s,box-shadow .15s}
+.shots .shot:nth-child(5n+2){border-color:var(--p)}.shots .shot:nth-child(5n+3){border-color:var(--c)}.shots .shot:nth-child(5n+4){border-color:var(--g)}.shots .shot:nth-child(5n+5){border-color:var(--o)}
+.shot:hover,.shot:focus-visible{transform:translate(-3px,-3px);box-shadow:6px 6px 0 var(--p);outline:none}
+.shot img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.shot figcaption{position:absolute;left:0;right:0;bottom:0;padding:1.4rem .7rem .45rem;font:700 .74rem/1.25 var(--fh);letter-spacing:.08em;text-transform:uppercase;color:#fff;background:linear-gradient(transparent,rgba(10,6,18,.92))}
+.shot .old{position:absolute;top:.45rem;right:.45rem;font:800 .6rem/1 var(--fh);letter-spacing:.12em;padding:.25rem .4rem;background:rgba(10,6,18,.85);color:var(--mut);border:1px solid var(--mut2)}
+.shot .nw{position:absolute;top:.45rem;right:.45rem;font:800 .6rem/1 var(--fh);letter-spacing:.12em;padding:.25rem .4rem;background:var(--g);color:var(--bg)}
+
+/* ── lightbox ── */
+#lightbox{display:none;position:fixed;inset:0;z-index:999;background:rgba(5,2,10,.95);align-items:center;justify-content:center}
+#lightbox.open{display:flex}
+#lightbox-img{max-width:90vw;max-height:80vh;border:3px solid var(--g);box-shadow:8px 8px 0 var(--p);user-select:none}
+#lightbox-close{position:absolute;top:1rem;right:1.2rem;font:800 2.2rem/1 var(--fh);color:var(--p);background:none;border:0;cursor:pointer}
+#lightbox-prev,#lightbox-next{position:absolute;top:50%;transform:translateY(-50%) skewX(-10deg);font:900 1.6rem/1 var(--fh);color:var(--bg);background:var(--g);border:3px solid var(--bg);box-shadow:4px 4px 0 var(--p);width:52px;height:52px;cursor:pointer;user-select:none}
+#lightbox-prev:hover,#lightbox-next:hover{background:var(--y)}
+#lightbox-prev{left:1.4rem}#lightbox-next{right:1.4rem}
+#lightbox-counter{position:absolute;bottom:1.1rem;left:50%;transform:translateX(-50%);width:90vw;text-align:center;font:700 .85rem var(--fh);letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+
+/* ── maps ── */
+#worlds{background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%)}
+.worlds{grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:1rem}
+.world{padding:1.15rem 1.3rem}
+.wn{font:800 .72rem var(--fh);letter-spacing:.2em;color:var(--mut2);margin-bottom:.25rem}
+.wname{font:italic 900 1.2rem/1.15 var(--fh);text-transform:uppercase;letter-spacing:.03em;margin-bottom:.35rem;display:flex;flex-wrap:wrap;align-items:center;gap:.35rem}
+.wd{font-size:.84rem;color:var(--mut);line-height:1.5}
+.tag{font:800 .6rem/1 var(--fh);letter-spacing:.14em;padding:.22rem .38rem;font-style:normal}
+.tag.n{background:var(--g);color:var(--bg)}.tag.u{background:var(--c);color:var(--bg)}.tag.b{border:1px solid #b48cff;color:#b48cff}
+
+/* ── fleet ── */
+#aircraft{background:var(--bg)}
+.fleet{grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:1rem}
+.craft{padding:1.1rem 1.2rem}
+.craft .nm{font:italic 900 1.15rem var(--fh);text-transform:uppercase;letter-spacing:.04em}
+.craft .sz{font:700 .76rem var(--fh);letter-spacing:.12em;text-transform:uppercase;color:var(--p);margin:.1rem 0 .3rem}
+.craft .ds{font-size:.84rem;color:var(--mut)}
+
+/* ── modes ── */
+#modes{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);text-align:center}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:3rem;text-align:left}
+.mode{background:#000;border:3px solid var(--v);padding:2rem;transform:skewX(-4deg)}
+.mode>*{transform:skewX(4deg)}
+.mode.on{border-color:var(--g);background:#120a1e;box-shadow:8px 8px 0 var(--p)}
+.mode h3{font:italic 900 2rem/1 var(--fh);text-transform:uppercase;margin-bottom:.6rem}
+.mode.on h3{color:var(--g)}.mode.acro h3{color:var(--c)}
+.mode p{color:var(--mut)}
+
+/* ── faq ── */
 #faq{background:var(--bg2)}
 .faq{max-width:860px;margin:2.5rem auto 0}
-.faq details{background:var(--card);border:1px solid var(--card-border);border-radius:10px;margin-bottom:.8rem;padding:1rem 1.25rem}
-.faq summary{cursor:pointer;font-weight:700;list-style:none}
+.faq details{background:var(--card);border:2px solid var(--v);margin-bottom:.8rem;padding:1rem 1.25rem}
+.faq details:nth-child(4n+2){border-color:var(--p)}.faq details:nth-child(4n+3){border-color:var(--c)}.faq details:nth-child(4n+4){border-color:var(--o)}
+.faq summary{cursor:pointer;font:italic 800 1.1rem var(--fh);letter-spacing:.03em;text-transform:uppercase;color:var(--ink);list-style:none}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:'+';float:right;color:var(--cyan);font-weight:800}
+.faq summary::after{content:'+';float:right;color:var(--g);font-weight:900}
 .faq details[open] summary::after{content:'–'}
-.faq p{color:var(--muted);margin-top:.6rem;font-size:.95rem}
-.world-card.featured{border-color:rgba(0,245,212,.45)}
-.tag{display:inline-block;font-size:.6rem;letter-spacing:.14em;font-weight:800;color:#07000f;background:var(--cyan);border-radius:3px;padding:.05rem .4rem;margin-left:.4rem;vertical-align:middle}
-.tag.beta{background:rgba(255,255,255,.14);color:var(--muted)}
-@media(max-width:680px){.nav-appstore{display:none}#hero{padding-top:7rem}.hero-stats{gap:1.5rem 0}.hero-stat{flex:0 0 50%}.hero-scroll{display:none}section{padding:4.5rem 1.25rem}.shots-grid,.screenshots-header{padding:0}#lightbox-prev,#lightbox-next{width:42px;height:42px;font-size:1.5rem}#lightbox-prev{left:.5rem}#lightbox-next{right:.5rem}.new-grid,.new-grid.small{grid-template-columns:1fr}}
+.faq details[open] summary{color:var(--g)}
+.faq p{color:var(--mut);margin-top:.6rem;font-size:.95rem}
+
+/* ── cta + footer ── */
+#cta{text-align:center;padding:7rem 2rem;background:var(--bg)}
+#cta .h2{font-size:clamp(2.6rem,7vw,5rem)}
+#cta p{color:var(--mut);font-size:1.1rem;margin:0 auto 2.4rem;max-width:620px}
+#cta .hero-cta{justify-content:center;margin-left:0}
+footer{position:relative;z-index:1;background:var(--bg);border-top:3px solid;border-image:var(--rb) 1;padding:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-links{display:flex;gap:1.5rem;list-style:none}
+.footer-links a{color:var(--mut);text-decoration:none;font:700 .85rem var(--fh);letter-spacing:.12em;text-transform:uppercase}
+.footer-links a:hover{color:var(--g)}
+.footer-copy{color:var(--mut2);font-size:.8rem}
+
+/* ── phones ── */
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:2.5rem}.drone{max-width:380px}.nav-links{display:none}}
+@media(max-width:680px){
+  nav{padding:.65rem 1rem}.nav-app{display:none}.brand span{display:none}
+  section{padding:4.5rem 1.1rem}#hero{padding:6.5rem 1.1rem 5rem}
+  .stat{flex:0 0 42%}
+  .modes{grid-template-columns:1fr}
+  .mg{grid-template-columns:1fr}
+  .new3,.new5{grid-template-columns:1fr}
+  .shots{grid-template-columns:1fr 1fr;gap:.6rem}
+  .shot figcaption{font-size:.62rem;padding:1rem .45rem .35rem}
+  #lightbox-prev,#lightbox-next{width:42px;height:42px;font-size:1.3rem}#lightbox-prev{left:.5rem}#lightbox-next{right:.5rem}
+  footer{flex-direction:column;text-align:center}.footer-links{justify-content:center}
+}
+@media(prefers-reduced-motion:reduce){.drone::before,.drone svg{animation:none}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
@@ -432,7 +223,7 @@ footer{
 <canvas id="bg-canvas"></canvas>
 
 <nav>
-  <span class="nav-logo">Trippy Plains</span>
+  <a class="brand" href="#hero"><img src="assets/icon.png" alt="" width="34" height="34"><span>Trippy Plains</span></a>
   <ul class="nav-links">
     <li><a href="#new">What's new</a></li>
     <li><a href="#features">Features</a></li>
@@ -441,148 +232,169 @@ footer{
     <li><a href="#faq">FAQ</a></li>
   </ul>
   <div class="nav-buttons">
+    <a class="nav-app" href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" rel="noopener">App Store</a>
     <a class="nav-steam" href="https://store.steampowered.com/app/4866640/?utm_source=website&amp;utm_medium=site&amp;utm_campaign=latest" target="_blank" rel="noopener">Get it on Steam</a>
-    <a class="nav-appstore" href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" rel="noopener" title="Download on the App Store">App Store</a>
   </div>
 </nav>
 
 <section id="hero">
-  <span class="hero-badge">New in v31: three new maps and a huge London update</span>
-  <p class="hero-eyebrow">FPV Freestyle Simulator</p>
-  <h1 class="hero-title">Trippy<br>Plains</h1>
-  <p class="hero-sub">Learn FPV from your first hover to your first flip with 50 step-by-step lessons, then fly 21 maps: a giant chess set, an ancient city, London with its Tube, a sea cave, a rocket launch site and Mars.<br>Runs on everyday laptops. Physics tuned by a pilot who flies a real 5-inch.</p>
-  <div class="hero-cta">
-    <a class="btn-primary" href="https://store.steampowered.com/app/4866640/?utm_source=website&amp;utm_medium=site&amp;utm_campaign=latest" target="_blank" rel="noopener">Get it on Steam &rarr;</a>
-    <a class="btn-secondary" href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" rel="noopener" title="Download on the App Store">Download on the App Store</a>
+  <div class="hero-grid">
+    <div>
+      <span class="eyebrow">FPV / Freestyle simulator</span><br>
+      <span class="hero-new">New in v31: 3 new maps + a huge London update</span>
+      <h1 class="title"><span class="t1">Trippy</span><span class="t2">Plains</span></h1>
+      <p class="hero-sub">Learn FPV from your first hover to your first flip with 50 step-by-step lessons, then fly 21 maps: a giant chess set, an ancient city, London with its Tube, a sea cave, a rocket launch site and Mars. Runs on everyday laptops. Physics tuned by a pilot who flies a real 5-inch.</p>
+      <div class="hero-cta">
+        <a class="btn btn-g" href="https://store.steampowered.com/app/4866640/?utm_source=website&amp;utm_medium=site&amp;utm_campaign=latest" target="_blank" rel="noopener">Get it on Steam &rsaquo;</a>
+        <a class="btn btn-k" href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" rel="noopener">App Store</a>
+      </div>
+      <p class="platforms">Steam: Windows &amp; Mac &middot; App Store: iPhone &amp; Mac (older version)</p>
+      <div class="stats">
+        <div class="stat"><b>21</b><span>Maps</span></div>
+        <div class="stat"><b>50</b><span>Lessons</span></div>
+        <div class="stat"><b>12</b><span>Drones</span></div>
+        <div class="stat"><b>48</b><span>Mini games</span></div>
+        <p class="stat-note">In the Steam version (Windows &amp; Mac)</p>
+      </div>
+    </div>
+    <div>
+      <div class="drone" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400"><g stroke="#0a0612" stroke-linecap="round"><line x1="300" y1="200" x2="150" y2="92" stroke-width="34"/><line x1="300" y1="200" x2="450" y2="92" stroke-width="34"/><line x1="300" y1="200" x2="150" y2="308" stroke-width="34"/><line x1="300" y1="200" x2="450" y2="308" stroke-width="34"/><line x1="300" y1="200" x2="150" y2="92" stroke="#7b2dff" stroke-width="22"/><line x1="300" y1="200" x2="450" y2="92" stroke="#7b2dff" stroke-width="22"/><line x1="300" y1="200" x2="150" y2="308" stroke="#7b2dff" stroke-width="22"/><line x1="300" y1="200" x2="450" y2="308" stroke="#7b2dff" stroke-width="22"/></g><defs><g id="tpProp"><circle r="80" fill="#ff2d95" stroke="#0a0612" stroke-width="5"/><circle r="67" fill="#0a0612"/><circle r="59" fill="#00e5ff"/><circle r="48" fill="#0a0612"/><circle r="40" fill="#c6ff00"/><circle r="30" fill="#0a0612"/><circle r="22" fill="#ff9f1c"/><g fill="#f4f0ff" stroke="#0a0612" stroke-width="4" opacity=".92"><path d="M0 0 C 10 -22 12 -52 0 -74 C -8 -52 -10 -22 0 0Z"/><path d="M0 0 C 10 -22 12 -52 0 -74 C -8 -52 -10 -22 0 0Z" transform="rotate(120)"/><path d="M0 0 C 10 -22 12 -52 0 -74 C -8 -52 -10 -22 0 0Z" transform="rotate(240)"/></g><circle r="17" fill="#f4f0ff" stroke="#0a0612" stroke-width="5"/><circle r="7" fill="#7b2dff"/></g></defs><use href="#tpProp" x="150" y="92"/><use href="#tpProp" x="450" y="92" transform="rotate(40 450 92)"/><use href="#tpProp" x="150" y="308" transform="rotate(80 150 308)"/><use href="#tpProp" x="450" y="308" transform="rotate(20 450 308)"/><g stroke="#0a0612" stroke-width="5" stroke-linecap="round"><line x1="282" y1="262" x2="258" y2="340"/><line x1="318" y1="262" x2="342" y2="340"/></g><circle cx="258" cy="340" r="9" fill="#ff9f1c" stroke="#0a0612" stroke-width="4"/><circle cx="342" cy="340" r="9" fill="#ff9f1c" stroke="#0a0612" stroke-width="4"/><rect x="238" y="128" width="124" height="146" rx="28" fill="#ff2d95" stroke="#0a0612" stroke-width="6"/><rect x="254" y="160" width="92" height="96" rx="14" fill="#c6ff00" stroke="#0a0612" stroke-width="5"/><rect x="254" y="188" width="92" height="9" fill="#7b2dff"/><rect x="254" y="212" width="92" height="9" fill="#00e5ff"/><path d="M306 168 L288 210 L301 210 L292 248 L314 200 L300 200 L310 168Z" fill="#0a0612"/><circle cx="300" cy="126" r="34" fill="#00e5ff" stroke="#0a0612" stroke-width="6"/><circle cx="300" cy="126" r="23" fill="#ffffff" stroke="#0a0612" stroke-width="4"/><circle cx="303" cy="124" r="12" fill="#7b2dff"/><circle cx="305" cy="122" r="6" fill="#0a0612"/><circle cx="308" cy="118" r="2.6" fill="#ffffff"/><g fill="#c6ff00" stroke="#0a0612" stroke-width="2.5"><path d="M60 200 l6 -16 l6 16 l16 6 l-16 6 l-6 16 l-6 -16 l-16 -6Z"/><path d="M540 196 l5 -13 l5 13 l13 5 l-13 5 l-5 13 l-5 -13 l-13 -5Z"/></g><g fill="#ffe600" stroke="#0a0612" stroke-width="2"><path d="M300 22 l4 -10 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4Z"/><path d="M300 386 l3 -8 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3Z"/></g></svg>
+      </div>
+      <div class="drone-cap"><span>The drone from the start screen</span><span>12 to fly</span></div>
+    </div>
   </div>
-  <p class="platforms">Steam: Windows &amp; Mac &middot; App Store: iPhone &amp; Mac (older version)</p>
-  <div class="hero-stats" style="margin-top:2rem">
-    <div class="hero-stat"><span class="hero-stat-n">21</span><span class="hero-stat-l">Maps</span></div>
-    <div class="hero-stat"><span class="hero-stat-n">50</span><span class="hero-stat-l">Lessons</span></div>
-    <div class="hero-stat"><span class="hero-stat-n">12</span><span class="hero-stat-l">Drones</span></div>
-    <div class="hero-stat"><span class="hero-stat-n">48</span><span class="hero-stat-l">Mini games</span></div>
-  </div>
-  <p class="stat-note">In the Steam version (Windows &amp; Mac)</p>
-  <div class="hero-scroll"><div class="scroll-arrow"></div>Scroll</div>
 </section>
 
 <section id="new">
-  <div style="max-width:1100px;margin:0 auto">
-    <p class="section-label">v31 &middot; November 2026 &middot; free update on Steam</p>
-    <h2 class="section-title">Three new maps. <span class="accent-cyan">A huge London update.</span></h2>
-    <p class="section-desc">Fly a giant chess set, an ancient city and the desert, ride the Tube, and find cave paintings in a sea cave.</p>
+  <div class="wrap">
+    <span class="eyebrow g">v31 &middot; November 2026 &middot; free update on Steam</span>
+    <h2 class="h2">Three new maps. <span class="acc">A huge London update.</span></h2>
+    <p class="lead">Fly a giant chess set, an ancient city and the desert, ride the Tube, and find cave paintings in a sea cave.</p>
+    <div class="cards new3 cyc">
+      <div class="card"><img src="screenshots/v31/01_checkmate_rook_golden_hour.jpg" alt="A giant marble rook on the CHECKMATE map at golden hour" loading="lazy" data-shot="v31/01_checkmate_rook_golden_hour.jpg"><div class="body"><h3>New map: CHECKMATE</h3><p>A giant marble chess set on a terrace above the sea. Fly through the rook gates, the knight's mouth and the queen's crown while the pieces replay five famous games, one move every 8 seconds.</p></div></div>
+      <div class="card"><img src="screenshots/v31/08_perge_colonnaded_street.jpg" alt="The colonnaded street on the PERGE map" loading="lazy" data-shot="v31/08_perge_colonnaded_street.jpg"><div class="body"><h3>New map: PERGE</h3><p>The ruins of an ancient city near Antalya, at real scale. Shoot the gap between the round gate towers, slalom the columns of the main street, and fly the baths, the stadium and the theatre.</p></div></div>
+      <div class="card"><img src="screenshots/v31/05_cave_paintings_gallery.jpg" alt="The painted gallery in DRACH CAVES" loading="lazy" data-shot="v31/05_cave_paintings_gallery.jpg"><div class="body"><h3>Cave paintings in DRACH CAVES</h3><p>22 painted panels and a 16 m painted gallery in the sea cave: horses, bison, deer, a mammoth, hand stencils and hunters. Our own Stone Age-style art, not copied from any real cave.</p></div></div>
+    </div>
+    <div class="cards new5 cyc">
+      <div class="card"><img src="screenshots/v31/17_dunes_oasis_dawn.jpg" alt="The oasis on the DUNES map at dawn" loading="lazy" data-shot="v31/17_dunes_oasis_dawn.jpg"><div class="body"><h3>New map: DUNES</h3><p>Desert dunes up to 150 m high. An oasis with date palms, a 5 m slot between two rock towers, an arch, and an oil rig whose drilling tower you can fly through.</p></div></div>
+      <div class="card"><img src="screenshots/v31/23_london_parliament_big_ben.jpg" alt="Parliament and Big Ben on the LONDON map" loading="lazy" data-shot="v31/23_london_parliament_big_ben.jpg"><div class="body"><h3>LONDON, much bigger</h3><p>A new start in St James's Park, Waterloo station with trains over the viaduct, St Paul's, Tube stations with escalators and running trains, Tower Bridge, the palace area, and 180 lost teddies to find.</p></div></div>
+      <div class="card"><img src="screenshots/v31/27_fractal_gaming_pc.jpg" alt="The giant gaming PC on FRACTAL" loading="lazy" data-shot="v31/27_fractal_gaming_pc.jpg"><div class="body"><h3>A giant gaming PC on FRACTAL</h3><p>80 times real size. Fly in through a front fan, over the graphics card and out of the back. Its monitor shows the game's own start screen.</p></div></div>
+      <div class="card"><div class="body"><h3>Everywhere</h3><p>FoV 83 by default for a more natural view (change it in TAB &rarr; Camera). A new factory FEEL for every drone. AUTO GRAB in CLAWTOWN. Confetti on every pickup.</p></div></div>
+    </div>
+    <div class="mg">
+      <div>
+        <h3>Mini games <small>48 games inside the game</small></h3>
+        <p>New on the start screen and in TAB. Each card shows what to do, the keys and your progress, and PLAY takes you straight there.</p>
+        <div class="chips"><span class="chip">Collect</span><span class="chip">Race</span><span class="chip">Smash</span><span class="chip">Watch</span><span class="chip">Build</span><span class="chip">Explore</span></div>
+      </div>
+      <div class="mg-n"><b>48</b>cards</div>
+    </div>
+    <p class="note">v31 is the Steam version (Windows &amp; Mac). The App Store version is separate and older, without these maps for now.</p>
   </div>
-  <div class="new-grid">
-    <div class="new-card"><img src="screenshots/v31/01_checkmate_rook_golden_hour.jpg" alt="A giant marble rook on the CHECKMATE map at golden hour" loading="lazy" data-shot="v31/01_checkmate_rook_golden_hour.jpg"><div class="body"><h3>New map: CHECKMATE</h3><p>A giant marble chess set on a terrace above the sea. Fly through the rook gates, the knight's mouth and the queen's crown while the pieces replay five famous games, one move every 8 seconds.</p></div></div>
-    <div class="new-card"><img src="screenshots/v31/08_perge_colonnaded_street.jpg" alt="The colonnaded street on the PERGE map" loading="lazy" data-shot="v31/08_perge_colonnaded_street.jpg"><div class="body"><h3>New map: PERGE</h3><p>The ruins of an ancient city near Antalya, at real scale. Shoot the gap between the round gate towers, slalom the columns of the main street, and fly the baths, the stadium and the theatre.</p></div></div>
-    <div class="new-card"><img src="screenshots/v31/05_cave_paintings_gallery.jpg" alt="The painted gallery in DRACH CAVES" loading="lazy" data-shot="v31/05_cave_paintings_gallery.jpg"><div class="body"><h3>Cave paintings in DRACH CAVES</h3><p>22 painted panels and a 16 m painted gallery in the sea cave: horses, bison, deer, a mammoth, hand stencils and hunters. Our own Stone Age-style art, not copied from any real cave.</p></div></div>
-  </div>
-  <div class="new-grid small">
-    <div class="new-card"><div class="body"><h3>New map: DUNES</h3><p>Desert dunes up to 150 m high. An oasis with date palms, a 5 m slot between two rock towers, an arch, and an oil rig whose drilling tower you can fly through.</p></div></div>
-    <div class="new-card"><div class="body"><h3>LONDON, much bigger</h3><p>A new start in St James's Park, Waterloo station with trains over the viaduct, St Paul's, Tube stations with escalators and running trains, Tower Bridge, the palace area, and 180 lost teddies to find.</p></div></div>
-    <div class="new-card"><div class="body"><h3>MINI GAMES</h3><p>48 cards on the start screen and in TAB: collect, race, smash, build, watch and explore. Each shows what to do and your progress, and PLAY takes you straight there.</p></div></div>
-    <div class="new-card"><div class="body"><h3>A giant gaming PC on FRACTAL</h3><p>80 times real size. Fly in through a front fan, over the graphics card and out of the back. Its monitor shows the game's own start screen.</p></div></div>
-    <div class="new-card"><div class="body"><h3>Everywhere</h3><p>FoV 83 by default for a more natural view (change it in TAB &rarr; Camera). A new factory FEEL for every drone. AUTO GRAB in CLAWTOWN. Confetti on every pickup.</p></div></div>
-  </div>
-  <p class="new-note">v31 is the Steam version (Windows &amp; Mac). The App Store version is separate and older, without these maps for now.</p>
 </section>
 
 <section id="features">
-  <div style="max-width:1100px;margin:0 auto">
-    <p class="section-label">Why Trippy Plains</p>
-    <h2 class="section-title">Built for <span class="accent-purple">real pilots.</span><br>Runs on <span class="accent-cyan">what you have.</span></h2>
-    <p class="section-desc">Whether you have never touched a radio or you fly acro every day, Trippy Plains meets you where you are.</p>
-    <div class="features-grid">
-      <div class="feature-card"><span class="feature-icon">🪂</span><h3>Physics tuned by a real pilot</h3><p>Tuned against a real 5-inch freestyle quad. Three FEEL sliders change how each drone flies (the middle is the factory feel), and you can type in your own rates.</p></div>
-      <div class="feature-card"><span class="feature-icon">🎥</span><h3>A natural FPV view</h3><p>FoV 83 by default, about 115&deg; from side to side on a 16:9 screen. Change it in TAB &rarr; Camera, tilt the camera for each drone, and fly at dawn, noon, dusk or night.</p></div>
-      <div class="feature-card"><span class="feature-icon">🎮</span><h3>Your radio or a gamepad</h3><p>FPV radios in USB joystick mode, gamepads or keyboard. Calibrate the sticks, then put ARM, RESET, NEXT MAP and more on any button. The menus work on a controller.</p></div>
-      <div class="feature-card"><span class="feature-icon">💻</span><h3>Runs on a laptop</h3><p>Quality modes for modest hardware, and Q switches between fast and full quality. No gaming PC required.</p></div>
-      <div class="feature-card"><span class="feature-icon">🎯</span><h3>48 mini games</h3><p>Collect, race, smash, build, watch and explore. Each card shows what to do, the keys and your progress.</p></div>
-      <div class="feature-card"><span class="feature-icon">🏁</span><h3>Races and gate tracks</h3><p>Speedway races with 10 levels against AI rivals, 4 gate tracks each on FIELD, BANDO and THE YARD, and your best run comes back as a ghost to beat.</p></div>
-      <div class="feature-card"><span class="feature-icon">🌐</span><h3>Fly together (preview)</h3><p>Online rooms through Steam, up to 8 pilots per room. Join the same room name, or invite a Steam friend.</p></div>
-      <div class="feature-card"><span class="feature-icon">📸</span><h3>Photo mode and clips</h3><p>Freeze the moment for a clean screenshot. On Steam, press C to record up to 60 seconds of your flight with sound.</p></div>
+  <div class="wrap">
+    <span class="eyebrow c">Why Trippy Plains</span>
+    <h2 class="h2">Built for real pilots. <span class="acc">Runs on what you have.</span></h2>
+    <p class="lead">Whether you have never touched a radio or you fly acro every day, Trippy Plains meets you where you are.</p>
+    <div class="cards feat cyc">
+      <div class="card"><span class="ico">🪂</span><h3>Physics tuned by a real pilot</h3><p>Tuned against a real 5-inch freestyle quad. Three FEEL sliders change how each drone flies (the middle is the factory feel), and you can type in your own rates.</p></div>
+      <div class="card"><span class="ico">🎥</span><h3>A natural FPV view</h3><p>FoV 83 by default, about 115&deg; from side to side on a 16:9 screen. Change it in TAB &rarr; Camera, tilt the camera for each drone, and fly at dawn, noon, dusk or night.</p></div>
+      <div class="card"><span class="ico">🎮</span><h3>Your radio or a gamepad</h3><p>FPV radios in USB joystick mode, gamepads or keyboard. Calibrate the sticks, then put ARM, RESET, NEXT MAP and more on any button. The menus work on a controller.</p></div>
+      <div class="card"><span class="ico">💻</span><h3>Runs on a laptop</h3><p>Quality modes for modest hardware, and Q switches between fast and full quality. No gaming PC required.</p></div>
+      <div class="card"><span class="ico">🏁</span><h3>Races and gate tracks</h3><p>Speedway races with 10 levels against AI rivals, 4 gate tracks each on FIELD, BANDO and THE YARD, and your best run comes back as a ghost to beat.</p></div>
+      <div class="card"><span class="ico">🌐</span><h3>Fly together (preview)</h3><p>Online rooms through Steam, up to 8 pilots per room. Join the same room name, or invite a Steam friend.</p></div>
+      <div class="card"><span class="ico">📸</span><h3>Photo mode and clips</h3><p>Freeze the moment for a clean screenshot. On Steam, press C to record up to 60 seconds of your flight with sound.</p></div>
+      <div class="card"><span class="ico">🎵</span><h3>Original music</h3><p>Original tracks, from psytrance to lo-fi, played live by the game. Music stays off until you turn it on.</p></div>
     </div>
   </div>
 </section>
 
 <section id="screenshots">
-  <div class="screenshots-header">
-    <p class="section-label">Gallery</p>
-    <h2 class="section-title">See the <span class="accent-purple">maps</span></h2>
-    <p class="section-desc">All in-game, real time. The first six are from v31. The rest are from earlier versions, with the old wider camera; those places are still in the game.</p>
+  <div class="wrap">
+    <span class="eyebrow">Gallery</span>
+    <h2 class="h2">See the <span class="acc">maps</span></h2>
+    <p class="lead">All in-game, real time, with the menus hidden. Pictures marked OLDER come from earlier versions; those places are still in the game.</p>
+    <div class="filters chips" role="group" aria-label="Filter screenshots">
+      <button class="chip" type="button" data-f="all" aria-pressed="true">All</button>
+      <button class="chip" type="button" data-f="new" aria-pressed="false">New in v31</button>
+      <button class="chip" type="button" data-f="old" aria-pressed="false">Older versions</button>
+    </div>
+    <div class="shots" id="shots"></div>
   </div>
-  <div class="shots-grid" id="shots"></div>
 </section>
 
 <section id="worlds">
-  <div class="worlds-header">
-    <p class="section-label">Maps</p>
-    <h2 class="section-title">21 maps to <span class="accent-cyan">explore</span></h2>
-    <p class="section-desc">Real places and impossible ones, each with its own lines and secrets. Maps marked BETA are still being improved.</p>
-  </div>
-  <div class="worlds-grid">
-    <div class="world-card featured"><div class="world-num">01</div><div class="world-name">CHECKMATE<span class="tag">NEW</span><span class="tag beta">BETA</span></div><div class="world-desc">A giant marble chess set above the sea. Fly through the pieces while they replay famous games.</div></div>
-    <div class="world-card featured"><div class="world-num">02</div><div class="world-name">PERGE<span class="tag">NEW</span><span class="tag beta">BETA</span></div><div class="world-desc">The ruins of an ancient city at real scale: gate towers, a colonnaded street with a water channel, baths, a stadium and a theatre.</div></div>
-    <div class="world-card featured"><div class="world-num">03</div><div class="world-name">DUNES<span class="tag">NEW</span><span class="tag beta">BETA</span></div><div class="world-desc">A sea of desert dunes: skim the crests, find the oasis and fly through the oil rig.</div></div>
-    <div class="world-card featured"><div class="world-num">04</div><div class="world-name">LONDON<span class="tag">UPDATED</span><span class="tag beta">BETA</span></div><div class="world-desc">Big Ben, the London Eye and the Thames, now with Waterloo, St Paul's, the Tube, the palace area and 180 lost teddies.</div></div>
-    <div class="world-card featured"><div class="world-num">05</div><div class="world-name">DRACH CAVES<span class="tag">UPDATED</span></div><div class="world-desc">A sea cave in Mallorca: stalactites, still lakes, musicians on boats, and now cave paintings. Land in the water and you sink.</div></div>
-    <div class="world-card featured"><div class="world-num">06</div><div class="world-name">FRACTAL<span class="tag">UPDATED</span></div><div class="world-desc">Rainbow rings teleport you, giant fractals have real tunnels, and a giant gaming PC to fly through.</div></div>
-    <div class="world-card featured"><div class="world-num">07</div><div class="world-name">CLAWTOWN<span class="tag">UPDATED</span><span class="tag beta">BETA</span></div><div class="world-desc">Take a claw drone and build your own map: walls, windows, doors, roof and chimney. It stays for your next visit.</div></div>
-    <div class="world-card"><div class="world-num">08</div><div class="world-name">BEGINNER</div><div class="world-desc">A quiet flying field with 50 step-by-step lessons, in ANGLE and ACRO.</div></div>
-    <div class="world-card"><div class="world-num">09</div><div class="world-name">THE YARD</div><div class="world-desc">A big industrial yard with forklifts, a container terminal and gate tracks. Land on the belt and robots repair your drone.</div></div>
-    <div class="world-card"><div class="world-num">10</div><div class="world-name">STAR</div><div class="world-desc">A rocket launch site by the sea. Rockets launch and the boosters fly back. Touch a ready rocket to launch it.</div></div>
-    <div class="world-card"><div class="world-num">11</div><div class="world-name">BANDO</div><div class="world-desc">An abandoned beach resort, with an oil rig offshore and fireworks over the sea.</div></div>
-    <div class="world-card"><div class="world-num">12</div><div class="world-name">CANYON</div><div class="world-desc">A deep canyon with a dragon, volcanoes, cave tunnels and 14 hidden pandas.</div></div>
-    <div class="world-card"><div class="world-num">13</div><div class="world-name">TRIPPY</div><div class="world-desc">The original home world. You start over a giant hole: dive in to find the same world turned inside out.</div></div>
-    <div class="world-card"><div class="world-num">14</div><div class="world-name">RACE</div><div class="world-desc">Speedway races: 10 levels from FIRST GATES to the GRAND PRIX, against 3 to 5 AI rivals.</div></div>
-    <div class="world-card"><div class="world-num">15</div><div class="world-name">PUMPKIN<span class="tag beta">BETA</span></div><div class="world-desc">A Halloween village. Fly into the giant pumpkin, or trick-or-treat at a little skeleton.</div></div>
-    <div class="world-card"><div class="world-num">16</div><div class="world-name">FIELD<span class="tag beta">BETA</span></div><div class="world-desc">Open countryside with gate tracks. Good for learning and for high-speed runs.</div></div>
-    <div class="world-card"><div class="world-num">17</div><div class="world-name">ATOM<span class="tag beta">BETA</span></div><div class="world-desc">A power station under a dark storm sky. Dive down the open top of an 80 m cooling tower.</div></div>
-    <div class="world-card"><div class="world-num">18</div><div class="world-name">FACTORY<span class="tag beta">BETA</span></div><div class="world-desc">An old industrial site. Dive down hollow chimneys and find giant excavators in the open pit.</div></div>
-    <div class="world-card"><div class="world-num">19</div><div class="world-name">MARS<span class="tag beta">BETA</span></div><div class="world-desc">Low gravity. Hook supply crates, fly them to the base pad and watch the base grow.</div></div>
-    <div class="world-card"><div class="world-num">20</div><div class="world-name">SANDBOX<span class="tag beta">BETA</span></div><div class="world-desc">Build your own course from gates, hoops, arches, pipes and walls, race it and share its code.</div></div>
-    <div class="world-card"><div class="world-num">21</div><div class="world-name">NORTH POLE<span class="tag beta">BETA</span></div><div class="world-desc">A snowy Christmas village with a giant tree. Santa flies round it, then down every chimney.</div></div>
+  <div class="wrap">
+    <span class="eyebrow o">Maps</span>
+    <h2 class="h2">21 maps to <span class="acc">explore</span></h2>
+    <p class="lead">Real places and impossible ones, each with its own lines and secrets. Maps marked BETA are still being improved.</p>
+    <div class="cards worlds cyc">
+      <div class="card world"><div class="wn">01</div><div class="wname">CHECKMATE <span class="tag n">NEW</span><span class="tag b">BETA</span></div><div class="wd">A giant marble chess set above the sea. Fly through the pieces while they replay famous games.</div></div>
+      <div class="card world"><div class="wn">02</div><div class="wname">PERGE <span class="tag n">NEW</span><span class="tag b">BETA</span></div><div class="wd">The ruins of an ancient city at real scale: gate towers, a colonnaded street with a water channel, baths, a stadium and a theatre.</div></div>
+      <div class="card world"><div class="wn">03</div><div class="wname">DUNES <span class="tag n">NEW</span><span class="tag b">BETA</span></div><div class="wd">A sea of desert dunes: skim the crests, find the oasis and fly through the oil rig.</div></div>
+      <div class="card world"><div class="wn">04</div><div class="wname">LONDON <span class="tag u">UPDATED</span><span class="tag b">BETA</span></div><div class="wd">Big Ben, the London Eye and the Thames, now with Waterloo, St Paul's, the Tube, the palace area and 180 lost teddies.</div></div>
+      <div class="card world"><div class="wn">05</div><div class="wname">DRACH CAVES <span class="tag u">UPDATED</span></div><div class="wd">A sea cave in Mallorca: stalactites, still lakes, musicians on boats, and now cave paintings. Land in the water and you sink.</div></div>
+      <div class="card world"><div class="wn">06</div><div class="wname">FRACTAL <span class="tag u">UPDATED</span></div><div class="wd">Rainbow rings teleport you, giant fractals have real tunnels, and a giant gaming PC to fly through.</div></div>
+      <div class="card world"><div class="wn">07</div><div class="wname">CLAWTOWN <span class="tag u">UPDATED</span><span class="tag b">BETA</span></div><div class="wd">Take a claw drone and build your own map: walls, windows, doors, roof and chimney. It stays for your next visit.</div></div>
+      <div class="card world"><div class="wn">08</div><div class="wname">BEGINNER</div><div class="wd">A quiet flying field with 50 step-by-step lessons, in ANGLE and ACRO.</div></div>
+      <div class="card world"><div class="wn">09</div><div class="wname">THE YARD</div><div class="wd">A big industrial yard with forklifts, a container terminal and gate tracks. Land on the belt and robots repair your drone.</div></div>
+      <div class="card world"><div class="wn">10</div><div class="wname">STAR</div><div class="wd">A rocket launch site by the sea. Rockets launch and the boosters fly back. Touch a ready rocket to launch it.</div></div>
+      <div class="card world"><div class="wn">11</div><div class="wname">BANDO</div><div class="wd">An abandoned beach resort, with an oil rig offshore and fireworks over the sea.</div></div>
+      <div class="card world"><div class="wn">12</div><div class="wname">CANYON</div><div class="wd">A deep canyon with a dragon, volcanoes, cave tunnels and 14 hidden pandas.</div></div>
+      <div class="card world"><div class="wn">13</div><div class="wname">TRIPPY</div><div class="wd">The original home world. You start over a giant hole: dive in to find the same world turned inside out.</div></div>
+      <div class="card world"><div class="wn">14</div><div class="wname">RACE</div><div class="wd">Speedway races: 10 levels from FIRST GATES to the GRAND PRIX, against 3 to 5 AI rivals.</div></div>
+      <div class="card world"><div class="wn">15</div><div class="wname">PUMPKIN <span class="tag b">BETA</span></div><div class="wd">A Halloween village. Fly into the giant pumpkin, or trick-or-treat at a little skeleton.</div></div>
+      <div class="card world"><div class="wn">16</div><div class="wname">FIELD <span class="tag b">BETA</span></div><div class="wd">Open countryside with gate tracks. Good for learning and for high-speed runs.</div></div>
+      <div class="card world"><div class="wn">17</div><div class="wname">ATOM <span class="tag b">BETA</span></div><div class="wd">A power station under a dark storm sky. Dive down the open top of an 80 m cooling tower.</div></div>
+      <div class="card world"><div class="wn">18</div><div class="wname">FACTORY <span class="tag b">BETA</span></div><div class="wd">An old industrial site. Dive down hollow chimneys and find giant excavators in the open pit.</div></div>
+      <div class="card world"><div class="wn">19</div><div class="wname">MARS <span class="tag b">BETA</span></div><div class="wd">Low gravity. Hook supply crates, fly them to the base pad and watch the base grow.</div></div>
+      <div class="card world"><div class="wn">20</div><div class="wname">SANDBOX <span class="tag b">BETA</span></div><div class="wd">Build your own course from gates, hoops, arches, pipes and walls, race it and share its code.</div></div>
+      <div class="card world"><div class="wn">21</div><div class="wname">NORTH POLE <span class="tag b">BETA</span></div><div class="wd">A snowy Christmas village with a giant tree. Santa flies round it, then down every chimney.</div></div>
+    </div>
   </div>
 </section>
 
 <section id="aircraft">
-  <div class="aircraft-header">
-    <p class="section-label">Fleet</p>
-    <h2 class="section-title">12 drones. <span style="color:var(--pink)">One simulator.</span></h2>
-    <p class="section-desc">Each drone has its own weight, motor response and handling. Find yours.</p>
-  </div>
-  <div class="aircraft-grid">
-    <div class="aircraft-card"><div class="aircraft-name">APEX 5</div><div class="aircraft-size">5" Freestyle</div><div class="aircraft-desc">920 g on 6S with a big pack. Raw power.</div></div>
-    <div class="aircraft-card"><div class="aircraft-name">GHOST 5</div><div class="aircraft-size">5" Freestyle</div><div class="aircraft-desc">680 g on 6S. Lighter than APEX 5.</div></div>
-    <div class="aircraft-card"><div class="aircraft-name">GHOST 6S</div><div class="aircraft-size">6S Race build</div><div class="aircraft-desc">600 g. Lighter and sharper than GHOST 5.</div></div>
-    <div class="aircraft-card"><div class="aircraft-name">VENOM R</div><div class="aircraft-size">5" Racer</div><div class="aircraft-desc">620 g on 6S. Very high rates, low drag.</div></div>
-    <div class="aircraft-card"><div class="aircraft-name">SILK 3</div><div class="aircraft-size">3.5" Cinewhoop</div><div class="aircraft-desc">Ducted and planted. Smooth and forgiving.</div></div>
-    <div class="aircraft-card"><div class="aircraft-name">FLEX 3.5</div><div class="aircraft-size">3.5" Freestyle</div><div class="aircraft-desc">Under 400 g on 4S. Nimble and punchy.</div></div>
-    <div class="aircraft-card"><div class="aircraft-name">STING 2.5</div><div class="aircraft-size">2.5" Sub-250</div><div class="aircraft-desc">245 g on 4S. Feather-light and twitchy.</div></div>
-    <div class="aircraft-card"><div class="aircraft-name">HORIZON 7</div><div class="aircraft-size">7" Freestyle / LR</div><div class="aircraft-desc">Big props and momentum. Floats and carries speed.</div></div>
-    <div class="aircraft-card"><div class="aircraft-name">PICO 65</div><div class="aircraft-size">65 mm 1S whoop</div><div class="aircraft-desc">30 g. Floats and drifts in a breeze.</div></div>
-    <div class="aircraft-card"><div class="aircraft-name">LOOPY</div><div class="aircraft-size">75 mm 2S whoop</div><div class="aircraft-desc">40 g. Snaps like a 5-inch; the ducts ride walls.</div></div>
-    <div class="aircraft-card"><div class="aircraft-name">TITAN X8</div><div class="aircraft-size">8" Cinelifter</div><div class="aircraft-desc">1.9 kg camera lifter. Plan two seconds ahead.</div></div>
-    <div class="aircraft-card"><div class="aircraft-name">ROTOR CP</div><div class="aircraft-size">Collective-pitch heli</div><div class="aircraft-desc">Flies inverted. A completely different challenge.</div></div>
+  <div class="wrap">
+    <span class="eyebrow v">Fleet</span>
+    <h2 class="h2">12 drones. <span class="acc">One simulator.</span></h2>
+    <p class="lead">Each drone has its own weight, motor response and handling. Find yours.</p>
+    <div class="cards fleet cyc">
+      <div class="card craft"><div class="nm">APEX 5</div><div class="sz">5" Freestyle</div><div class="ds">920 g on 6S with a big pack. Raw power.</div></div>
+      <div class="card craft"><div class="nm">GHOST 5</div><div class="sz">5" Freestyle</div><div class="ds">680 g on 6S. Lighter than APEX 5.</div></div>
+      <div class="card craft"><div class="nm">GHOST 6S</div><div class="sz">6S Race build</div><div class="ds">600 g. Lighter and sharper than GHOST 5.</div></div>
+      <div class="card craft"><div class="nm">VENOM R</div><div class="sz">5" Racer</div><div class="ds">620 g on 6S. Very high rates, low drag.</div></div>
+      <div class="card craft"><div class="nm">SILK 3</div><div class="sz">3.5" Cinewhoop</div><div class="ds">Ducted and planted. Smooth and forgiving.</div></div>
+      <div class="card craft"><div class="nm">FLEX 3.5</div><div class="sz">3.5" Freestyle</div><div class="ds">Under 400 g on 4S. Nimble and punchy.</div></div>
+      <div class="card craft"><div class="nm">STING 2.5</div><div class="sz">2.5" Sub-250</div><div class="ds">245 g on 4S. Feather-light and twitchy.</div></div>
+      <div class="card craft"><div class="nm">HORIZON 7</div><div class="sz">7" Freestyle / LR</div><div class="ds">Big props and momentum. Floats and carries speed.</div></div>
+      <div class="card craft"><div class="nm">PICO 65</div><div class="sz">65 mm 1S whoop</div><div class="ds">30 g. Floats and drifts in a breeze.</div></div>
+      <div class="card craft"><div class="nm">LOOPY</div><div class="sz">75 mm 2S whoop</div><div class="ds">40 g. Snaps like a 5-inch; the ducts ride walls.</div></div>
+      <div class="card craft"><div class="nm">TITAN X8</div><div class="sz">8" Cinelifter</div><div class="ds">1.9 kg camera lifter. Plan two seconds ahead.</div></div>
+      <div class="card craft"><div class="nm">ROTOR CP</div><div class="sz">Collective-pitch heli</div><div class="ds">Flies inverted. A completely different challenge.</div></div>
+    </div>
   </div>
 </section>
 
 <section id="modes">
-  <div class="modes-inner">
-    <p class="section-label">Flight Modes</p>
-    <h2 class="section-title">Your pace. <span class="accent-purple">Your rules.</span></h2>
-    <p class="section-desc" style="margin:0 auto">Switch modes at any time with a single key. Each mode has 25 step-by-step lessons on the BEGINNER field.</p>
-    <div class="modes-row">
-      <div class="mode-card"><span class="mode-badge badge-angle">Angle Mode</span><h3>Self-Levelling</h3><p>The drone levels itself when you let go of the sticks. Pick it up in minutes and explore every map.</p></div>
-      <div class="mode-card acro"><span class="mode-badge badge-acro">Acro Mode</span><h3>Full Manual</h3><p>No self-levelling. The drone keeps your tilt, so you can flip and roll. The real FPV experience, and muscle memory for the real thing.</p></div>
+  <div class="wrap">
+    <span class="eyebrow g">Flight modes</span>
+    <h2 class="h2">Your pace. <span class="acc">Your rules.</span></h2>
+    <p class="lead" style="margin:0 auto">Switch modes at any time with a single key. Each mode has 25 step-by-step lessons on the BEGINNER field.</p>
+    <div class="modes">
+      <div class="mode on"><h3>Angle</h3><p>Self-levelling. The drone levels itself when you let go of the sticks. Pick it up in minutes and explore every map.</p></div>
+      <div class="mode acro"><h3>Acro</h3><p>Full manual. The drone keeps your tilt, so you can flip and roll. The real FPV experience, and muscle memory for the real thing.</p></div>
     </div>
   </div>
 </section>
 
 <section id="faq">
-  <div style="max-width:860px;margin:0 auto">
-    <p class="section-label">FAQ</p>
-    <h2 class="section-title">Good to <span class="accent-cyan">know</span></h2>
+  <div class="wrap" style="max-width:860px">
+    <span class="eyebrow c">FAQ</span>
+    <h2 class="h2">Good to <span class="acc">know</span></h2>
   </div>
   <div class="faq">
     <details><summary>Does Trippy Plains run on Mac?</summary><p>Yes. The Steam version runs on Windows and macOS (Apple Silicon and Intel, notarized by Apple). An older version is also on the App Store.</p></details>
@@ -597,20 +409,16 @@ footer{
 </section>
 
 <section id="cta">
-  <div class="cta-inner">
-    <h2>Ready to fly?</h2>
-    <p>v31 is out now on Steam for Windows and Mac. An older version is on the App Store for iPhone and Mac.</p>
-    <div class="badge-row">
-      <a class="steam-badge" href="https://store.steampowered.com/app/4866640/?utm_source=website&amp;utm_medium=site&amp;utm_campaign=latest" target="_blank" rel="noopener">Get it on Steam</a>
-      <a class="appstore-badge" href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" rel="noopener" title="Download on the App Store">
-        <span class="appstore-badge-label"><span class="appstore-badge-sub">Download on the</span><span class="appstore-badge-name">App Store</span></span>
-      </a>
-    </div>
+  <h2 class="h2">Ready to <span class="acc">fly?</span></h2>
+  <p>v31 is out now on Steam for Windows and Mac. An older version is on the App Store for iPhone and Mac.</p>
+  <div class="hero-cta">
+    <a class="btn btn-g" href="https://store.steampowered.com/app/4866640/?utm_source=website&amp;utm_medium=site&amp;utm_campaign=latest" target="_blank" rel="noopener">Get it on Steam &rsaquo;</a>
+    <a class="btn btn-k" href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" rel="noopener">App Store</a>
   </div>
 </section>
 
 <footer>
-  <span class="footer-logo">Trippy Plains</span>
+  <a class="brand" href="#hero"><img src="assets/icon.png" alt="" width="34" height="34"><span>Trippy Plains</span></a>
   <ul class="footer-links">
     <li><a href="https://store.steampowered.com/app/4866640/?utm_source=website&amp;utm_medium=site&amp;utm_campaign=latest" target="_blank" rel="noopener">Steam Store</a></li>
     <li><a href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" rel="noopener">App Store</a></li>
@@ -619,128 +427,132 @@ footer{
   <span class="footer-copy">&copy; 2026 FPV Studio. All rights reserved.</span>
 </footer>
 
-<div id="lightbox" role="dialog" aria-modal="true">
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot viewer">
   <button id="lightbox-close" aria-label="Close">&times;</button>
-  <button id="lightbox-prev" aria-label="Previous">&#8592;</button>
-  <img id="lightbox-img" src="" alt="Screenshot">
-  <button id="lightbox-next" aria-label="Next">&#8594;</button>
+  <button id="lightbox-prev" aria-label="Previous">&lsaquo;</button>
+  <img id="lightbox-img" alt="">
+  <button id="lightbox-next" aria-label="Next">&rsaquo;</button>
   <div id="lightbox-counter"></div>
 </div>
 
 <script>
-// ── Animated canvas background (floating particles + grid) ──────────────────
-const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
-let W, H, particles;
-
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
+// ── background: drifting dots in the TRIPPY BASS colours ─────────────────────
+const canvas = document.getElementById('bg-canvas'), ctx = canvas.getContext('2d');
+const COLS = ['198,255,0','255,45,149','0,229,255','123,45,255','255,159,28'];
+let W, H, dots, t = 0;
+const still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+function resize(){ W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+function init(){ dots = Array.from({length: 70}, () => ({x: Math.random()*W, y: Math.random()*H, r: Math.random()*1.6+.4, vx: (Math.random()-.5)*.25, vy: (Math.random()-.5)*.25, c: COLS[(Math.random()*COLS.length)|0], a: Math.random()*.55+.25})); }
+function frame(){
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle = 'rgba(123,45,255,0.07)'; ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 64){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 64){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  dots.forEach(p => { if (!still){ p.x += p.vx; p.y += p.vy; } if (p.x<0) p.x=W; if (p.x>W) p.x=0; if (p.y<0) p.y=H; if (p.y>H) p.y=0;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle = `rgba(${p.c},${p.a})`; ctx.fill(); });
+  t++; if (!still) requestAnimationFrame(frame);
 }
+resize(); init(); frame();
+addEventListener('resize', () => { resize(); init(); if (still) frame(); });
 
-function initParticles() {
-  particles = Array.from({length: 80}, () => ({
-    x: Math.random() * W,
-    y: Math.random() * H,
-    r: Math.random() * 1.5 + 0.3,
-    vx: (Math.random() - .5) * .25,
-    vy: (Math.random() - .5) * .25,
-    hue: Math.random() < .5 ? 280 : 170,
-    alpha: Math.random() * .6 + .2,
-  }));
-}
-
-function drawGrid() {
-  ctx.strokeStyle = 'rgba(130,60,255,0.06)';
-  ctx.lineWidth = 1;
-  const gap = 60;
-  for (let x = 0; x < W; x += gap) {
-    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
-  }
-  for (let y = 0; y < H; y += gap) {
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-  }
-}
-
-let t = 0;
-function frame() {
-  ctx.clearRect(0, 0, W, H);
-  drawGrid();
-  particles.forEach(p => {
-    p.x += p.vx; p.y += p.vy;
-    if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
-    if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `hsla(${p.hue},100%,75%,${p.alpha})`;
-    ctx.fill();
-  });
-  // slow drifting glow orbs
-  const orbs = [
-    {x: W*.2, y: H*.3, hue: 280}, {x: W*.8, y: H*.7, hue: 170},
-    {x: W*.5, y: H*.5, hue: 320},
-  ];
-  orbs.forEach((o, i) => {
-    const ox = o.x + Math.sin(t * .0004 + i * 2) * 60;
-    const oy = o.y + Math.cos(t * .0003 + i * 1.5) * 40;
-    const grad = ctx.createRadialGradient(ox, oy, 0, ox, oy, 220);
-    grad.addColorStop(0, `hsla(${o.hue},100%,65%,0.07)`);
-    grad.addColorStop(1, 'transparent');
-    ctx.fillStyle = grad;
-    ctx.beginPath(); ctx.arc(ox, oy, 220, 0, Math.PI * 2); ctx.fill();
-  });
-  t++;
-  requestAnimationFrame(frame);
-}
-
-resize(); initParticles(); frame();
-window.addEventListener('resize', () => { resize(); initParticles(); });
-
-// ── Screenshots grid: v31 first, then older shots of places still in the game ──
-const shots = [
-  ["v31/01_checkmate_rook_golden_hour.jpg", "CHECKMATE: a giant rook at golden hour"],
-  ["v31/02_checkmate_board_from_above.jpg", "CHECKMATE: the board from above"],
-  ["v31/08_perge_colonnaded_street.jpg", "PERGE: the colonnaded street"],
-  ["v31/05_cave_paintings_gallery.jpg", "DRACH CAVES: the painted gallery"],
-  ["v31/06_cave_paintings_the_hunt.jpg", "DRACH CAVES: the hunt"],
-  ["v31/07_cave_paintings_painted_chamber.jpg", "DRACH CAVES: the painted chamber"],
-  ["v25/02_beginner_gates.jpg", "BEGINNER: lesson gates"],
-  ["v25/01_yard_forklift.jpg", "THE YARD: a forklift"],
-  ["v24/08_container_terminal.jpg", "THE YARD: the container terminal"],
-  ["v25/04_launch_site_sea.jpg", "STAR: the launch site and the sea"],
-  ["v24/06_bando_shell_xl_dusk.jpg", "BANDO at dusk"],
-  ["v24/04_canyon_dragon_fire.jpg", "CANYON: the dragon"],
-  ["v25/07_canyon_river.jpg", "CANYON: the river"],
-  ["v24/07_fractal_unicorn_herd.jpg", "FRACTAL: unicorns"]
+// ── screenshots: [full picture, small picture, caption, new in v31?] ─────────
+const SHOTS = [
+  ["v31/01_checkmate_rook_golden_hour.jpg", "v31/t/01_checkmate_rook_golden_hour.jpg", "CHECKMATE: a giant rook at golden hour", true],
+  ["v31/02_checkmate_board_from_above.jpg", "v31/t/02_checkmate_board_from_above.jpg", "CHECKMATE: the board from above", true],
+  ["v31/10_checkmate_queen_noon.jpg", "v31/t/10_checkmate_queen_noon.jpg", "CHECKMATE: the queen's side at noon", true],
+  ["v31/12_checkmate_king_dawn.jpg", "v31/t/12_checkmate_king_dawn.jpg", "CHECKMATE: the king at dawn", true],
+  ["v31/11_checkmate_terrace_aerial.jpg", "v31/t/11_checkmate_terrace_aerial.jpg", "CHECKMATE: the terrace above the sea", true],
+  ["v31/04_checkmate_life_size_cafe_table.jpg", "v31/t/04_checkmate_life_size_cafe_table.jpg", "CHECKMATE: the life-size cafe table at the start", true],
+  ["v31/08_perge_colonnaded_street.jpg", "v31/t/08_perge_colonnaded_street.jpg", "PERGE: the colonnaded street", true],
+  ["v31/13_perge_street_fountain_dusk.jpg", "v31/t/13_perge_street_fountain_dusk.jpg", "PERGE: the street and its water channel at dusk", true],
+  ["v31/14_perge_gate_court.jpg", "v31/t/14_perge_gate_court.jpg", "PERGE: the gate court", true],
+  ["v31/15_perge_gate_tower_dawn.jpg", "v31/t/15_perge_gate_tower_dawn.jpg", "PERGE: a gate tower at dawn", true],
+  ["v31/16_perge_theatre.jpg", "v31/t/16_perge_theatre.jpg", "PERGE: the theatre", true],
+  ["v31/17_dunes_oasis_dawn.jpg", "v31/t/17_dunes_oasis_dawn.jpg", "DUNES: the oasis at dawn", true],
+  ["v31/18_dunes_rock_towers.jpg", "v31/t/18_dunes_rock_towers.jpg", "DUNES: the slot between two rock towers", true],
+  ["v31/19_dunes_arch.jpg", "v31/t/19_dunes_arch.jpg", "DUNES: the arch", true],
+  ["v31/20_dunes_crest_dusk.jpg", "v31/t/20_dunes_crest_dusk.jpg", "DUNES: along a crest at dusk", true],
+  ["v31/21_dunes_oil_rig_derrick.jpg", "v31/t/21_dunes_oil_rig_derrick.jpg", "DUNES: inside the oil rig's drilling tower", true],
+  ["v31/22_dunes_oil_rig_night.jpg", "v31/t/22_dunes_oil_rig_night.jpg", "DUNES: the oil rig at night", true],
+  ["v31/23_london_parliament_big_ben.jpg", "v31/t/23_london_parliament_big_ben.jpg", "LONDON: Parliament and Big Ben", true],
+  ["v31/24_london_big_ben_bus.jpg", "v31/t/24_london_big_ben_bus.jpg", "LONDON: Big Ben and a red bus", true],
+  ["v31/25_london_parliament_dusk.jpg", "v31/t/25_london_parliament_dusk.jpg", "LONDON: Parliament at dusk", true],
+  ["v31/26_london_tower_bridge.jpg", "v31/t/26_london_tower_bridge.jpg", "LONDON: Tower Bridge", true],
+  ["v31/05_cave_paintings_gallery.jpg", "v31/t/05_cave_paintings_gallery.jpg", "DRACH CAVES: the painted gallery", true],
+  ["v31/06_cave_paintings_the_hunt.jpg", "v31/t/06_cave_paintings_the_hunt.jpg", "DRACH CAVES: the hunt", true],
+  ["v31/07_cave_paintings_painted_chamber.jpg", "v31/t/07_cave_paintings_painted_chamber.jpg", "DRACH CAVES: the painted chamber", true],
+  ["v31/27_fractal_gaming_pc.jpg", "v31/t/27_fractal_gaming_pc.jpg", "FRACTAL: the giant gaming PC", true],
+  ["v31/28_fractal_gaming_pc_screen.jpg", "v31/t/28_fractal_gaming_pc_screen.jpg", "FRACTAL: the PC's monitor shows the start screen", true],
+  ["v31/29_fractal_start.jpg", "v31/t/29_fractal_start.jpg", "FRACTAL: the start", true],
+  ["v31/30_north_pole_village.jpg", "v31/t/30_north_pole_village.jpg", "NORTH POLE: the village", true],
+  ["v31/31_north_pole_arches.jpg", "v31/t/31_north_pole_arches.jpg", "NORTH POLE: candy-cane arches and the giant tree", true],
+  ["v31/32_north_pole_night.jpg", "v31/t/32_north_pole_night.jpg", "NORTH POLE: the giant tree at night", true],
+  ["v31/37_trippy_start.jpg", "v31/t/37_trippy_start.jpg", "TRIPPY: the start", true],
+  ["v31/38_pumpkin_gate.jpg", "v31/t/38_pumpkin_gate.jpg", "PUMPKIN: the village gate", true],
+  ["v31/33_bando_oil_rig.jpg", "v31/t/33_bando_oil_rig.jpg", "BANDO: the oil rig offshore", true],
+  ["v31/34_bando_towers.jpg", "v31/t/34_bando_towers.jpg", "BANDO: the unfinished towers", true],
+  ["v31/35_the_yard_forklift.jpg", "v31/t/35_the_yard_forklift.jpg", "THE YARD: forklifts at work", true],
+  ["v31/36_race_speedway.jpg", "v31/t/36_race_speedway.jpg", "RACE: the speedway", true],
+  ["v31/39_atom_cooling_towers.jpg", "v31/t/39_atom_cooling_towers.jpg", "ATOM: the cooling towers", true],
+  ["v31/40_factory_blast_furnace.jpg", "v31/t/40_factory_blast_furnace.jpg", "FACTORY: the blast furnace", true],
+  ["v31/41_mars_base.jpg", "v31/t/41_mars_base.jpg", "MARS: the base pad", true],
+  ["v31/42_clawtown.jpg", "v31/t/42_clawtown.jpg", "CLAWTOWN: the building site", true],
+  ["v28/04_speedway_grand_prix_crowd_rivals.jpg", "v28/t/04_speedway_grand_prix_crowd_rivals.jpg", "RACE: the Grand Prix", false],
+  ["v28/02_bando_smash60_window_smash.jpg", "v28/t/02_bando_smash60_window_smash.jpg", "BANDO: SMASH 60", false],
+  ["v28/06_bando_fireworks_show_night.jpg", "v28/t/06_bando_fireworks_show_night.jpg", "BANDO: fireworks at night", false],
+  ["v28/10_bando_main_street_gate_track.jpg", "v28/t/10_bando_main_street_gate_track.jpg", "BANDO: a gate track on the main street", false],
+  ["v24/06_bando_shell_xl_dusk.jpg", "", "BANDO at dusk", false],
+  ["v28/07_london_westminster_hall.jpg", "v28/t/07_london_westminster_hall.jpg", "LONDON: inside Westminster Hall", false],
+  ["v28/03_field_gate_track_rivals.jpg", "v28/t/03_field_gate_track_rivals.jpg", "FIELD: a gate track", false],
+  ["v28/05_the_yard_drone_service_robots.jpg", "v28/t/05_the_yard_drone_service_robots.jpg", "THE YARD: drone service robots", false],
+  ["v28/11_the_yard_container_terminal_gate_track.jpg", "v28/t/11_the_yard_container_terminal_gate_track.jpg", "THE YARD: a gate track in the container terminal", false],
+  ["v25/01_yard_forklift.jpg", "", "THE YARD: a forklift", false],
+  ["v24/08_container_terminal.jpg", "", "THE YARD: the container terminal", false],
+  ["v25/02_beginner_gates.jpg", "", "BEGINNER: lesson gates", false],
+  ["v25/04_launch_site_sea.jpg", "", "STAR: the launch site and the sea", false],
+  ["v24/04_canyon_dragon_fire.jpg", "", "CANYON: the dragon", false],
+  ["v25/07_canyon_river.jpg", "", "CANYON: the river", false],
+  ["v24/07_fractal_unicorn_herd.jpg", "", "FRACTAL: unicorns", false]
 ];
-
 const grid = document.getElementById('shots');
-const shotSrc = n => 'screenshots/' + n;
-shots.forEach(([name, alt], i) => {
-  const img = document.createElement('img');
-  img.src = shotSrc(name); img.loading = 'lazy';
-  img.alt = 'Trippy Plains screenshot: ' + alt;
-  img.addEventListener('click', () => openLightbox(i));
-  grid.appendChild(img);
-});
-document.querySelectorAll('[data-shot]').forEach(img => img.addEventListener('click', () => openLightbox(Math.max(0, shots.findIndex(s => s[0] === img.dataset.shot)))));
+const src = p => 'screenshots/' + p;
+let view = SHOTS.map((s, i) => i);
+function render(f){
+  grid.textContent = '';
+  view = SHOTS.map((s, i) => i).filter(i => f === 'all' || (f === 'new') === SHOTS[i][3]);
+  view.forEach((i, k) => {
+    const s = SHOTS[i], fig = document.createElement('figure');
+    fig.className = 'shot'; fig.tabIndex = 0; fig.setAttribute('role', 'button'); fig.setAttribute('aria-label', 'Open screenshot: ' + s[2]);
+    const img = document.createElement('img'); img.src = src(s[1] || s[0]); img.loading = 'lazy'; img.alt = s[2]; img.width = 640; img.height = 360;
+    const cap = document.createElement('figcaption'); cap.textContent = s[2];
+    const b = document.createElement('span'); b.className = s[3] ? 'nw' : 'old'; b.textContent = s[3] ? 'v31' : 'OLDER';
+    fig.append(img, cap, b);
+    fig.addEventListener('click', () => openLightbox(k));
+    fig.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openLightbox(k); } });
+    grid.appendChild(fig);
+  });
+}
+document.querySelectorAll('.filters button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.filters button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+  render(b.dataset.f);
+}));
+render('all');
+document.querySelectorAll('[data-shot]').forEach(img => img.addEventListener('click', () => {
+  document.querySelector('.filters button[data-f="all"]').click();
+  openLightbox(Math.max(0, SHOTS.findIndex(s => s[0] === img.dataset.shot)));
+}));
 
-// ── Lightbox with prev/next navigation ───────────────────────────────────────
-const lb = document.getElementById('lightbox');
-const lbImg = document.getElementById('lightbox-img');
-const lbCounter = document.getElementById('lightbox-counter');
-let lbIndex = 0;
-
-function openLightbox(idx) {
-  lbIndex = ((idx % shots.length) + shots.length) % shots.length;
-  lbImg.src = shotSrc(shots[lbIndex][0]);
-  lbImg.alt = shots[lbIndex][1];
-  lbCounter.textContent = (lbIndex + 1) + ' / ' + shots.length + ' · ' + shots[lbIndex][1];
+// ── lightbox ─────────────────────────────────────────────────────────────────
+const lb = document.getElementById('lightbox'), lbImg = document.getElementById('lightbox-img'), lbCounter = document.getElementById('lightbox-counter');
+let lbK = 0;
+function openLightbox(k){
+  lbK = ((k % view.length) + view.length) % view.length;
+  const s = SHOTS[view[lbK]];
+  lbImg.src = src(s[0]); lbImg.alt = s[2];
+  lbCounter.textContent = (lbK + 1) + ' / ' + view.length + ' · ' + s[2] + (s[3] ? '' : ' · older version');
   lb.classList.add('open');
 }
-function lbPrev() { openLightbox(lbIndex - 1); }
-function lbNext() { openLightbox(lbIndex + 1); }
-
+const lbPrev = () => openLightbox(lbK - 1), lbNext = () => openLightbox(lbK + 1);
 document.getElementById('lightbox-close').addEventListener('click', () => lb.classList.remove('open'));
 document.getElementById('lightbox-prev').addEventListener('click', e => { e.stopPropagation(); lbPrev(); });
 document.getElementById('lightbox-next').addEventListener('click', e => { e.stopPropagation(); lbNext(); });
@@ -751,31 +563,20 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft') lbPrev();
   if (e.key === 'ArrowRight') lbNext();
 });
+let tx = 0;
+lb.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive: true});
+lb.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 40) dx < 0 ? lbNext() : lbPrev(); });
 
-// Touch swipe support
-let touchStartX = 0;
-lb.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
-lb.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  if (Math.abs(dx) > 40) dx < 0 ? lbNext() : lbPrev();
-});
-
-// ── Intersection fade-in ─────────────────────────────────────────────────────
-const style = document.createElement('style');
-style.textContent = `.fade-in{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}.fade-in.visible{opacity:1;transform:none}`;
-document.head.appendChild(style);
-document.querySelectorAll('.feature-card,.world-card,.aircraft-card,.mode-card,.new-card').forEach(el => {
-  el.classList.add('fade-in');
-});
-const io = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 40);
-      io.unobserve(e.target);
-    }
-  });
-}, {threshold: .1});
-document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+// ── fade in on scroll ────────────────────────────────────────────────────────
+if (!still && 'IntersectionObserver' in window){
+  const st = document.createElement('style');
+  st.textContent = '.fade-in{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}.fade-in.visible{opacity:1;transform:none}.card.fade-in.visible:hover{transform:translate(-3px,-3px)}.mode.fade-in.visible{transform:skewX(-4deg)}';
+  document.head.appendChild(st);
+  const els = document.querySelectorAll('.card,.mode,.mg');
+  els.forEach(el => el.classList.add('fade-in'));
+  const io = new IntersectionObserver(es => es.forEach((e, i) => { if (e.isIntersecting){ setTimeout(() => e.target.classList.add('visible'), i * 40); io.unobserve(e.target); } }), {threshold: .08});
+  els.forEach(el => io.observe(el));
+}
 </script>
 </body>
 </html>
