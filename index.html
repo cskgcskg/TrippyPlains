@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied'});
+window.tpTag=function(){if(window.tpTagOn)return;window.tpTagOn=1;
+ gtag('consent','update',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});
+ gtag('js',new Date());var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtm.js?id=GTM-WLLMX7W6';document.head.appendChild(s);};
+try{if(localStorage.getItem('tpConsent')==='yes')tpTag();}catch(e){}
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trippy Plains: FPV Drone Simulator for Windows, Mac and iPhone</title>
@@ -424,6 +432,7 @@ footer{position:relative;z-index:1;background:var(--bg);border-top:3px solid;bor
     <li><a href="https://store.steampowered.com/app/4866640/?utm_source=website&amp;utm_medium=site&amp;utm_campaign=latest" target="_blank" rel="noopener">Steam Store</a></li>
     <li><a href="https://apps.apple.com/gb/app/trippy-plains-fpv-drone-sim/id6782116665" target="_blank" rel="noopener">App Store</a></li>
     <li><a href="privacy.html">Privacy Policy</a></li>
+    <li><a href="#" onclick="if(window.tpCookieSettings)tpCookieSettings();return false;">Cookie settings</a></li>
   </ul>
   <span class="footer-copy">&copy; <span id="yr">2026</span> FPV Studio. All rights reserved.</span>
 </footer>
@@ -575,5 +584,19 @@ if (!still && 'IntersectionObserver' in window){
   els.forEach(el => io.observe(el));
 }
 </script>
+<div id="tpCk" role="dialog" aria-label="Cookie choice" style="display:none;position:fixed;z-index:2147483000;right:16px;bottom:16px;max-width:min(430px,calc(100vw - 32px));background:#0a0612;color:#f4f0ff;border:3px solid #c6ff00;box-shadow:6px 6px 0 #ff2d95;padding:14px 16px;font:14px/1.45 system-ui,-apple-system,'Segoe UI',sans-serif;text-align:left">
+<p style="margin:0 0 10px">Can we use Google Analytics cookies? They count visits and show which posts and ads bring people here. Nothing is sold. <a href="/privacy.html" style="color:#c6ff00">Privacy</a></p>
+<div style="display:flex;gap:10px"><button id="tpCkNo" type="button" style="flex:1;cursor:pointer;background:#000;color:#00e5ff;border:2px solid #00e5ff;font:700 14px system-ui,sans-serif;padding:9px 10px">Decline</button><button id="tpCkYes" type="button" style="flex:1;cursor:pointer;background:#c6ff00;color:#0a0612;border:2px solid #c6ff00;font:700 14px system-ui,sans-serif;padding:9px 10px">Accept</button></div>
+</div>
+<script>
+(function(){var b=document.getElementById('tpCk');if(!b)return;function show(){b.style.display='block';}function hide(){b.style.display='none';}
+var c=null;try{c=localStorage.getItem('tpConsent');}catch(e){}if(c!=='yes'&&c!=='no')show();
+document.getElementById('tpCkYes').onclick=function(e){e.stopPropagation();try{localStorage.setItem('tpConsent','yes');}catch(x){}hide();if(window.tpTag)tpTag();};
+document.getElementById('tpCkNo').onclick=function(e){e.stopPropagation();try{localStorage.setItem('tpConsent','no');}catch(x){}hide();
+ if(window.tpTagOn){gtag('consent','update',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied'});
+  document.cookie.split(';').forEach(function(k){var n=k.split('=')[0].trim();if(/^(_ga|_gid|_gcl)/.test(n)){document.cookie=n+'=;Max-Age=0;path=/;domain=.trippyplains.com';document.cookie=n+'=;Max-Age=0;path=/';}});}};
+window.tpCookieSettings=function(){show();};})();
+</script>
+
 </body>
 </html>
