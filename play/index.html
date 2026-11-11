@@ -1027,7 +1027,7 @@ html.z10drag #z10Drag{display:block;position:fixed;top:0;left:0;right:0;height:1
   <div class="sr tpMuX"><button class="btn sec" id="muPrev" title="Previous track" aria-label="Previous track">◀ PREV</button><button class="btn sec" id="muPlay" title="Play or pause the music">▶ PLAY</button><button class="btn sec" id="muNext" title="Next track" aria-label="Next track">NEXT ▶</button></div>
   <div class="sr" title="Play the tracks in random order (otherwise in list order)."><span>Shuffle</span><button class="btn sec" id="muShuf" aria-pressed="false">SHUFFLE · OFF</button></div>
   <div class="sr" title="Music volume (apart from the motors)."><span>Music volume</span><input type="range" id="muVol" min="0" max="100" step="5" value="50" data-def="50"><span class="sv" id="muVolV">50%</span></div>
-  <div class="sr" title="Motor sound volume: the same setting as Sound → Motor volume (moving one moves the other)."><span>Motor volume</span><input type="range" id="muMVol" min="0" max="100" step="5" value="15" data-def="15" aria-label="Motor volume"><span class="sv" id="muMVolV">60%</span></div>
+  <div class="sr" title="Motor sound volume: the same setting as Sound → Motor volume (moving one moves the other)."><span>Motor volume</span><input type="range" id="muMVol" min="0" max="100" step="5" value="0" data-def="0" aria-label="Motor volume"><span class="sv" id="muMVolV">60%</span></div>
   <div class="sr" title="Lower the music a little while the motors work hard."><span>Duck under motors</span><button class="btn sec" id="muDuck" aria-pressed="true">ON</button></div>
   <div class="sr" title="What plays when you fly this map. Saved for each map."><label for="muMap" id="muMapL">On this map</label><select id="muMap" data-def="auto" style="font:inherit;color:#b7cbd4;background:#111c24;border:1px solid #344b5b;padding:6px;max-width:200px"><option value="auto">Map default</option><option value="shuffle">Shuffle</option><option value="keep">Keep what is playing</option><option value="off">Off on this map</option></select></div>
   <div class="tpMuNow" id="muNow" aria-live="polite"></div>
@@ -9504,7 +9504,7 @@ class HUD { constructor(){ this._f=new THREE.Vector3(); this._stk=[[],[]]; }
 } }
  
 class Audio {
-  constructor(){ this.ready=false; this.vol=0.15; this.ctx=null; this.profile="real";try{if(localStorage.getItem("tpVoiceV27")!=="1"){localStorage.removeItem("fpvMotorVoice");localStorage.setItem("tpVoiceV27","1");}    const v=localStorage.getItem("fpvMotorVoice");if(v==="deep"||v==="fpv"||v==="cam")this.profile=v;const vv=parseFloat(localStorage.getItem("tpMotorVol"));if(vv>=0&&vv<=1)this.vol=vv;}catch(e){} }    
+  constructor(){ this.ready=false; this.vol=0; this.ctx=null; this.profile="real";try{if(localStorage.getItem("tpVoiceV27")!=="1"){localStorage.removeItem("fpvMotorVoice");localStorage.setItem("tpVoiceV27","1");}    const v=localStorage.getItem("fpvMotorVoice");if(v==="deep"||v==="fpv"||v==="cam")this.profile=v;const vv=parseFloat(localStorage.getItem("tpMotorVol"));if(vv>=0&&vv<=1)this.vol=vv;}catch(e){} }    
   start(){ if(this.ready) { if(this.ctx.state==='suspended') this.ctx.resume(); return; }
     const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
     const c=this.ctx=new AC(); this.ready=true;
@@ -16036,7 +16036,7 @@ MAPDEF.chess='clutch';
 MAPDEF.dunes='glitch';    
 
  
-const LS='tpMusicV1',DEF={on:false,vol:50,shuf:false,duck:true,cur:'redline',maps:{}};
+const LS='tpMusicV1',DEF={on:true,vol:50,shuf:false,duck:true,cur:'redline',maps:{}};
 const st=Object.assign({},DEF,(()=>{try{return JSON.parse(localStorage.getItem(LS)||'{}')||{};}catch(e){return {};}})());
 if(!st.maps||typeof st.maps!=='object')st.maps={};if(!TR[st.cur])st.cur=DEF.cur;st.vol=clamp(+st.vol||0,0,100);
 const save=()=>{try{localStorage.setItem(LS,JSON.stringify(st));}catch(e){}};
@@ -16332,7 +16332,7 @@ const GUIDE={intro:'New here? This is what you can do in the game, and how to st
   {n:'Your Betaflight rates',l:'Type or paste your own Betaflight rates and fly them at once.'},
   {n:'Camera tilt',l:'Tilt the FPV camera up or down. Each drone keeps its own angle.',k:'PgUp · PgDn · RB'},
   {n:'Wind and time of day',l:'Turn on gusty wind, or fly at dawn, noon, dusk or night.',k:'V'},
-  {n:'Music',l:'27 original tracks, played live by the game. It stays off until you turn it on.',a:'music'},
+  {n:'Music',l:'27 original tracks, played live by the game. CLUTCH KICK plays on this map; turn music off or pick another track in TAB → Music.',a:'music'},
   {n:'Fast or full quality',l:'Game running slow? Q switches between fast and full quality.',k:'Q'}]}]};
 
 const chips=k=>k?'<span class="z7ks">'+k.split(' · ').map(x=>'<b class="z7k">'+E(x)+'</b>').join('')+'</span>':'';
